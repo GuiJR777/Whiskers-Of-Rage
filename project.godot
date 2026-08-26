@@ -1,0 +1,7 @@
+; Engine configuration file.
+
+[application]
+
+config/name="Whiskers Of Rage"
+config/icon="res://icon.png"
+config/features=PackedStringArray("4.7")
