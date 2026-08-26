@@ -1,0 +1,131 @@
+[gd_scene format=3 uid="uid://bncvvro8kyih0"]
+
+[ext_resource type="Material" uid="uid://bowittfc54vy2" path="res://assets/materials/prototype/prototype_floor.tres" id="1_0ojxy"]
+[ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="1_iqjut"]
+[ext_resource type="Material" uid="uid://ddjxprm4apldm" path="res://assets/materials/prototype/prototype_wall.tres" id="2_e0nyi"]
+[ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="2_rw1dt"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="3_mlc7w"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0ojxy"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_e0nyi"]
+sky_material = SubResource("ProceduralSkyMaterial_0ojxy")
+
+[sub_resource type="Environment" id="Environment_6bgu4"]
+background_mode = 2
+sky = SubResource("Sky_e0nyi")
+glow_enabled = true
+
+[sub_resource type="Resource" id="Resource_k73tv"]
+script = ExtResource("3_mlc7w")
+
+[sub_resource type="BoxMesh" id="BoxMesh_f6a36"]
+material = ExtResource("1_0ojxy")
+size = Vector3(50, 1, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f6a36"]
+size = Vector3(50, 1, 50)
+
+[sub_resource type="BoxMesh" id="BoxMesh_t5jfb"]
+material = ExtResource("2_e0nyi")
+size = Vector3(50, 2, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t5jfb"]
+size = Vector3(50, 2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t5jfb"]
+albedo_color = Color(0.019607844, 0.09019608, 0.16470589, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_f6a36"]
+material = SubResource("StandardMaterial3D_t5jfb")
+radius = 0.3
+height = 1.4
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f6a36"]
+radius = 0.3
+height = 1.4
+
+[node name="DevArena" type="Node3D" unique_id=1602664160]
+
+[node name="Enviroment" type="Node3D" parent="." unique_id=1169136075]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Enviroment" unique_id=1829194533]
+environment = SubResource("Environment_6bgu4")
+
+[node name="Sun" type="DirectionalLight3D" parent="Enviroment" unique_id=1789786561]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1976480761]
+top_level = true
+
+[node name="PhantomCameraHost" type="Node" parent="Camera3D" unique_id=433173221]
+process_priority = 300
+process_physics_priority = 300
+script = ExtResource("1_iqjut")
+
+[node name="PhantomCamera3D" type="Node3D" parent="." unique_id=1863975033]
+script = ExtResource("2_rw1dt")
+tween_resource = SubResource("Resource_k73tv")
+
+[node name="Arena" type="Node3D" parent="." unique_id=50667888]
+
+[node name="Floor" type="StaticBody3D" parent="Arena" unique_id=837428084]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Floor" unique_id=2071447111]
+mesh = SubResource("BoxMesh_f6a36")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Floor" unique_id=499642832]
+shape = SubResource("BoxShape3D_f6a36")
+
+[node name="Wall" type="StaticBody3D" parent="Arena" unique_id=1216357124]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 24.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Wall" unique_id=193670654]
+mesh = SubResource("BoxMesh_t5jfb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Wall" unique_id=99245890]
+shape = SubResource("BoxShape3D_t5jfb")
+
+[node name="Wall2" type="StaticBody3D" parent="Arena" unique_id=1337078593]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -24.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Wall2" unique_id=1359872105]
+mesh = SubResource("BoxMesh_t5jfb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Wall2" unique_id=507349125]
+shape = SubResource("BoxShape3D_t5jfb")
+
+[node name="Wall3" type="StaticBody3D" parent="Arena" unique_id=2144158292]
+transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, -24.499903, 1.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Wall3" unique_id=773222531]
+mesh = SubResource("BoxMesh_t5jfb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Wall3" unique_id=1625070492]
+shape = SubResource("BoxShape3D_t5jfb")
+
+[node name="Wall4" type="StaticBody3D" parent="Arena" unique_id=831440005]
+transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, 24.499903, 1.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Wall4" unique_id=1671298417]
+mesh = SubResource("BoxMesh_t5jfb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Wall4" unique_id=896158197]
+shape = SubResource("BoxShape3D_t5jfb")
+
+[node name="Ryu" type="CharacterBody3D" parent="." unique_id=1088585059]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+
+[node name="Visual" type="Node3D" parent="Ryu" unique_id=1462090707]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ryu/Visual" unique_id=42278648]
+mesh = SubResource("CapsuleMesh_f6a36")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ryu" unique_id=751194653]
+shape = SubResource("CapsuleShape3D_f6a36")
+
+[node name="CameraTarget" type="Node3D" parent="Ryu" unique_id=444579056]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29072213, 0)

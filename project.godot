@@ -18,6 +18,7 @@ config/icon="res://icon.png"
 [autoload]
 
 WORGasRuntimeDebug="*uid://jkw33cvq2w1a"
+PhantomCameraManager="*uid://duq6jhf6unyis"
 MCPRuntimeBridge="*res://addons/godot_mcp/services/mcp_runtime_bridge.gd"
 MCPInputBridge="*res://addons/godot_mcp/services/mcp_input_bridge.gd"
 MCPScreenshotBridge="*res://addons/godot_mcp/services/mcp_screenshot_bridge.gd"
@@ -29,4 +30,4 @@ window/size/viewport_height=1080
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg", "res://addons/wor_gameplay_framework/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg", "res://addons/phantom_camera/plugin.cfg", "res://addons/wor_gameplay_framework/plugin.cfg")
