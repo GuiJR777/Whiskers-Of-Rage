@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="GameplayTagCatalog" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag_catalog.gd" id="1_catalog"]
+
+[resource]
+script = ExtResource("1_catalog")
+tags = Array[ExtResource("1_catalog")]([])

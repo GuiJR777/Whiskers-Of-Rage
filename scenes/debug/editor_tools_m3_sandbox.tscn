@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/debug/editor_tools_m3_sandbox.gd" id="1_demo"]
+[ext_resource type="Script" path="res://addons/wor_gameplay_framework/runtime/ability_system_component.gd" id="2_asc"]
+
+[node name="EditorToolsM3Sandbox" type="Node"]
+script = ExtResource("1_demo")
+
+[node name="SourceASC" type="Node" parent="."]
+script = ExtResource("2_asc")
+initialize_on_ready = false
+
+[node name="TargetASC" type="Node" parent="."]
+script = ExtResource("2_asc")
+initialize_on_ready = false

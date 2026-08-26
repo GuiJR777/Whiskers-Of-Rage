@@ -1,0 +1,403 @@
+# Project-scoped skill policy.
+# External, user-installed, and plugin-provided skills are disabled here.
+# OpenAI SYSTEM skills under C:/Users/MSI/.codex/skills/.system remain available.
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/agency'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/agency/agency'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/create-rule'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/create-skill'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/create-subagent'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/migrate-to-skills'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/brainstorming'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/dispatching-parallel-agents'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/executing-plans'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/finishing-a-development-branch'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/receiving-code-review'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/requesting-code-review'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/subagent-driven-development'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/systematic-debugging'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/test-driven-development'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/using-git-worktrees'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/using-superpowers'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/verification-before-completion'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/writing-plans'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/superpowers/writing-skills'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.agents/skills/update-cursor-settings'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/chatgpt-global/github/0.1.3/skills/gh-address-comments'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/chatgpt-global/github/0.1.3/skills/gh-fix-ci'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/chatgpt-global/github/0.1.3/skills/github'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/chatgpt-global/github/0.1.3/skills/yeet'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-bundled/browser/26.818.22352/skills/control-in-app-browser'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-bundled/sites/0.1.40/skills/sites-building'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-bundled/sites/0.1.40/skills/sites-hosting'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-bundled/visualize/1.0.22/skills/visualize'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/app-6a3293e129088191abf0875820e839da/1.2.1/skills/faceless-channel'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/app-6a3293e129088191abf0875820e839da/1.2.1/skills/narrator'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/app-6a3293e129088191abf0875820e839da/1.2.1/skills/subtitles'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/canva/14.0.0/skills/canva-brand-check'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/canva/14.0.0/skills/canva-branded-presentation'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/canva/14.0.0/skills/canva-bulk-create'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/canva/14.0.0/skills/canva-design-feedback'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/canva/14.0.0/skills/canva-edit-design'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/canva/14.0.0/skills/canva-implement-feedback'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/canva/14.0.0/skills/canva-resize-for-social-media'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/canva/14.0.0/skills/canva-translate-design'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/cloudflare/0.1.2/skills/agents-sdk'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/cloudflare/0.1.2/skills/building-ai-agent-on-cloudflare'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/cloudflare/0.1.2/skills/building-mcp-server-on-cloudflare'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/cloudflare/0.1.2/skills/cloudflare'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/cloudflare/0.1.2/skills/durable-objects'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/cloudflare/0.1.2/skills/sandbox-sdk'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/cloudflare/0.1.2/skills/web-perf'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/cloudflare/0.1.2/skills/workers-best-practices'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/cloudflare/0.1.2/skills/wrangler'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.15/skills/google-docs'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.15/skills/google-drive'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.15/skills/google-drive-comments'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.15/skills/google-sheets'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/google-drive/0.1.15/skills/google-slides'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/meshy-openai-plugin/0.4.1/skills/meshy-3d-generation'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/meshy-openai-plugin/0.4.1/skills/meshy-3d-printing'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/notion/0.1.7/skills/notion-knowledge-capture'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/notion/0.1.7/skills/notion-meeting-intelligence'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/notion/0.1.7/skills/notion-research-documentation'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/notion/0.1.7/skills/notion-spec-to-implementation'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/skills/plugin-management'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/stripe/7.0.0/skills/connect-recommend'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/stripe/7.0.0/skills/stripe-apps'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/stripe/7.0.0/skills/stripe-best-practices'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/stripe/7.0.0/skills/stripe-directory'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/stripe/7.0.0/skills/stripe-docs'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/stripe/7.0.0/skills/stripe-projects'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-curated-remote/stripe/7.0.0/skills/upgrade-stripe'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-primary-runtime/documents/26.819.11345/skills/documents'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-primary-runtime/pdf/26.819.11345/skills/pdf'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-primary-runtime/presentations/26.819.11345/skills/presentations'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.819.11345/skills/excel-live-control'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.819.11345/skills/spreadsheets'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/plugins/cache/openai-primary-runtime/template-creator/26.819.11345/skills/template-creator'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/skills/agency'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/skills/agency/agency'
+enabled = false
+
+[[skills.config]]
+path = 'C:/Users/MSI/.codex/skills/impeccable'
+enabled = false
+
+# Project-scoped Godot editor integration.
+[mcp_servers.godot-mcp]
+command = 'C:\nvm4w\nodejs\node.exe'
+args = ['C:/Users/MSI/Desktop/RamiresTech/Games/Assets/Gratuito/godot-mcp/server/build/index.js']
+enabled = true
+startup_timeout_sec = 20
+tool_timeout_sec = 120
+
+[mcp_servers.godot-mcp.env]
+GODOT_MCP_PORT = '6505'
+
