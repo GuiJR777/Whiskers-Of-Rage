@@ -4,7 +4,13 @@
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="1_iqjut"]
 [ext_resource type="Material" uid="uid://ddjxprm4apldm" path="res://assets/materials/prototype/prototype_wall.tres" id="2_e0nyi"]
 [ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="2_rw1dt"]
+[ext_resource type="Script" uid="uid://5jqkpw73th1n" path="res://game/camera/third_person_camera_controller.gd" id="3_0jsky"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="3_mlc7w"]
+[ext_resource type="Script" uid="uid://d5nahfrkedod" path="res://game/movement/movement_component.gd" id="6_k73tv"]
+[ext_resource type="Resource" uid="uid://cnqk7cfkrlsds" path="res://game/characters/player/ryu/resources/ryu_movement_config.tres" id="7_80gdj"]
+[ext_resource type="Script" uid="uid://b8hhnqsugykly" path="res://addons/phantom_camera/scripts/resources/camera_3d_resource.gd" id="7_yu54f"]
+[ext_resource type="Script" uid="uid://bsv5wq3nfd2ld" path="res://game/characters/player/player_controller.gd" id="8_0jsky"]
+[ext_resource type="Script" uid="uid://bste3e18adw41" path="res://game/combat/targeting/targeting_component.gd" id="9_yu54f"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0ojxy"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -17,9 +23,6 @@ sky_material = SubResource("ProceduralSkyMaterial_0ojxy")
 background_mode = 2
 sky = SubResource("Sky_e0nyi")
 glow_enabled = true
-
-[sub_resource type="Resource" id="Resource_k73tv"]
-script = ExtResource("3_mlc7w")
 
 [sub_resource type="BoxMesh" id="BoxMesh_f6a36"]
 material = ExtResource("1_0ojxy")
@@ -34,6 +37,13 @@ size = Vector3(50, 2, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_t5jfb"]
 size = Vector3(50, 2, 1)
+
+[sub_resource type="Resource" id="Resource_k73tv"]
+script = ExtResource("3_mlc7w")
+
+[sub_resource type="Resource" id="Resource_0jsky"]
+script = ExtResource("7_yu54f")
+metadata/_custom_type_script = "uid://b8hhnqsugykly"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t5jfb"]
 albedo_color = Color(0.019607844, 0.09019608, 0.16470589, 1)
@@ -89,110 +99,290 @@ _data = {
 &"blink": SubResource("Animation_rw1dt")
 }
 
+[sub_resource type="PrismMesh" id="PrismMesh_f6a36"]
+material = SubResource("StandardMaterial3D_t5jfb")
+size = Vector3(0.3, 0.2, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iqjut"]
+albedo_color = Color(0.85882354, 0.003921569, 0.03137255, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_f6a36"]
+material = SubResource("StandardMaterial3D_iqjut")
+top_radius = 0.32
+bottom_radius = 0.31
+height = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rw1dt"]
+albedo_color = Color(0.3019608, 0.3019608, 0.30980393, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_mlc7w"]
+material = SubResource("StandardMaterial3D_rw1dt")
+top_radius = 0.32
+bottom_radius = 0.32
+height = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k73tv"]
+albedo_color = Color(0.85882354, 0.003921569, 0.03137255, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_80gdj"]
+material = SubResource("StandardMaterial3D_k73tv")
+top_radius = 0.3
+bottom_radius = 0.31
+height = 0.1
+
+[sub_resource type="SphereMesh" id="SphereMesh_f6a36"]
+material = SubResource("StandardMaterial3D_k73tv")
+radius = 0.05
+height = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_5pd38"]
+material = SubResource("StandardMaterial3D_k73tv")
+size = Vector3(0.03, 0.01, 0.3)
+
+[sub_resource type="TextMesh" id="TextMesh_f6a36"]
+material = SubResource("StandardMaterial3D_t5jfb")
+text = "S"
+font_size = 72
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mlc7w"]
+albedo_color = Color(0.04395193, 0.04395193, 0.04395192, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_k73tv"]
+material = SubResource("StandardMaterial3D_mlc7w")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p7od3"]
+albedo_color = Color(0.53224236, 0.53224236, 0.53224236, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_5pd38"]
+material = SubResource("StandardMaterial3D_p7od3")
+radius = 0.02
+height = 0.8
+radial_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_80gdj"]
+albedo_color = Color(0.92843145, 0.664194, 1.1551381e-06, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_t5jfb"]
+material = SubResource("StandardMaterial3D_80gdj")
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.01
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vby3f"]
+albedo_color = Color(0.04395193, 0.04395193, 0.04395192, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_5pd38"]
+material = SubResource("StandardMaterial3D_vby3f")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.2
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f6a36"]
 radius = 0.3
 height = 1.4
 
 [node name="DevArena" type="Node3D" unique_id=1602664160]
 
-[node name="Enviroment" type="Node3D" parent="." unique_id=1169136075]
+[node name="World" type="Node3D" parent="." unique_id=1169136075]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Enviroment" unique_id=1829194533]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World" unique_id=1829194533]
 environment = SubResource("Environment_6bgu4")
 
-[node name="Sun" type="DirectionalLight3D" parent="Enviroment" unique_id=1789786561]
+[node name="Sun" type="DirectionalLight3D" parent="World" unique_id=1789786561]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1976480761]
+[node name="Arena" type="Node3D" parent="World" unique_id=50667888]
+
+[node name="Floor" type="StaticBody3D" parent="World/Arena" unique_id=837428084]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Arena/Floor" unique_id=2071447111]
+mesh = SubResource("BoxMesh_f6a36")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Arena/Floor" unique_id=499642832]
+shape = SubResource("BoxShape3D_f6a36")
+
+[node name="Wall" type="StaticBody3D" parent="World/Arena" unique_id=1216357124]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 24.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Arena/Wall" unique_id=193670654]
+mesh = SubResource("BoxMesh_t5jfb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Arena/Wall" unique_id=99245890]
+shape = SubResource("BoxShape3D_t5jfb")
+
+[node name="Wall2" type="StaticBody3D" parent="World/Arena" unique_id=1337078593]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -24.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Arena/Wall2" unique_id=1359872105]
+mesh = SubResource("BoxMesh_t5jfb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Arena/Wall2" unique_id=507349125]
+shape = SubResource("BoxShape3D_t5jfb")
+
+[node name="Wall3" type="StaticBody3D" parent="World/Arena" unique_id=2144158292]
+transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, -24.499903, 1.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Arena/Wall3" unique_id=773222531]
+mesh = SubResource("BoxMesh_t5jfb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Arena/Wall3" unique_id=1625070492]
+shape = SubResource("BoxShape3D_t5jfb")
+
+[node name="Wall4" type="StaticBody3D" parent="World/Arena" unique_id=831440005]
+transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, 24.499903, 1.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Arena/Wall4" unique_id=1671298417]
+mesh = SubResource("BoxMesh_t5jfb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Arena/Wall4" unique_id=896158197]
+shape = SubResource("BoxShape3D_t5jfb")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1684490347]
+
+[node name="CameraController" type="Node" parent="CameraRig" unique_id=1892272391 node_paths=PackedStringArray("phantom_camera")]
+script = ExtResource("3_0jsky")
+phantom_camera = NodePath("../PhantomCamera3D")
+max_pitch = 15.0
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=1976480761]
+physics_interpolation_mode = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4907222, 5)
 top_level = true
 
-[node name="PhantomCameraHost" type="Node" parent="Camera3D" unique_id=433173221]
+[node name="PhantomCameraHost" type="Node" parent="CameraRig/Camera3D" unique_id=433173221]
 process_priority = 300
 process_physics_priority = 300
 script = ExtResource("1_iqjut")
 
-[node name="PhantomCamera3D" type="Node3D" parent="." unique_id=1863975033]
+[node name="PhantomCamera3D" type="Node3D" parent="CameraRig" unique_id=1863975033 node_paths=PackedStringArray("follow_target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4907222, 5)
 script = ExtResource("2_rw1dt")
+priority = 1
+follow_mode = 6
+follow_target = NodePath("../../Player/Ryu/CameraTarget")
 tween_resource = SubResource("Resource_k73tv")
+camera_3d_resource = SubResource("Resource_0jsky")
+follow_distance = 5.0
+spring_length = 5.0
+align_transform_with_view = Callable()
+align_position_with_view = Callable()
+align_rotation_with_view = Callable()
 
-[node name="Arena" type="Node3D" parent="." unique_id=50667888]
+[node name="Player" type="Node3D" parent="." unique_id=749219598]
 
-[node name="Floor" type="StaticBody3D" parent="Arena" unique_id=837428084]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Floor" unique_id=2071447111]
-mesh = SubResource("BoxMesh_f6a36")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Floor" unique_id=499642832]
-shape = SubResource("BoxShape3D_f6a36")
-
-[node name="Wall" type="StaticBody3D" parent="Arena" unique_id=1216357124]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 24.5)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Wall" unique_id=193670654]
-mesh = SubResource("BoxMesh_t5jfb")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Wall" unique_id=99245890]
-shape = SubResource("BoxShape3D_t5jfb")
-
-[node name="Wall2" type="StaticBody3D" parent="Arena" unique_id=1337078593]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -24.5)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Wall2" unique_id=1359872105]
-mesh = SubResource("BoxMesh_t5jfb")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Wall2" unique_id=507349125]
-shape = SubResource("BoxShape3D_t5jfb")
-
-[node name="Wall3" type="StaticBody3D" parent="Arena" unique_id=2144158292]
-transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, -24.499903, 1.5, 0)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Wall3" unique_id=773222531]
-mesh = SubResource("BoxMesh_t5jfb")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Wall3" unique_id=1625070492]
-shape = SubResource("BoxShape3D_t5jfb")
-
-[node name="Wall4" type="StaticBody3D" parent="Arena" unique_id=831440005]
-transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, 24.499903, 1.5, 0)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Arena/Wall4" unique_id=1671298417]
-mesh = SubResource("BoxMesh_t5jfb")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Arena/Wall4" unique_id=896158197]
-shape = SubResource("BoxShape3D_t5jfb")
-
-[node name="Ryu" type="CharacterBody3D" parent="." unique_id=1088585059]
+[node name="Ryu" type="CharacterBody3D" parent="Player" unique_id=1088585059]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 
-[node name="Visual" type="Node3D" parent="Ryu" unique_id=1462090707]
+[node name="Visual" type="Node3D" parent="Player/Ryu" unique_id=1462090707]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 
-[node name="Body" type="MeshInstance3D" parent="Ryu/Visual" unique_id=42278648]
+[node name="Body" type="MeshInstance3D" parent="Player/Ryu/Visual" unique_id=42278648]
 mesh = SubResource("CapsuleMesh_f6a36")
 
-[node name="Eyes" type="Node3D" parent="Ryu/Visual/Body" unique_id=598433920]
+[node name="Eyes" type="Node3D" parent="Player/Ryu/Visual/Body" unique_id=598433920]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3406011, 0.29930508)
 
-[node name="Eye" type="MeshInstance3D" parent="Ryu/Visual/Body/Eyes" unique_id=1005599205]
+[node name="Eye" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Eyes" unique_id=1005599205]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0, 0)
 mesh = SubResource("CapsuleMesh_t5jfb")
 
-[node name="Eye2" type="MeshInstance3D" parent="Ryu/Visual/Body/Eyes" unique_id=1015833619]
+[node name="Eye2" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Eyes" unique_id=1015833619]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0, 0)
 mesh = SubResource("CapsuleMesh_t5jfb")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Ryu/Visual/Body/Eyes" unique_id=844317790]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Player/Ryu/Visual/Body/Eyes" unique_id=844317790]
 libraries/ = SubResource("AnimationLibrary_mlc7w")
 autoplay = &"blink"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ryu" unique_id=751194653]
+[node name="Ears" type="Node3D" parent="Player/Ryu/Visual/Body" unique_id=353099886]
+
+[node name="Ear" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Ears" unique_id=389977758]
+transform = Transform3D(0.96677554, -0.25562674, 0, 0.25562674, 0.96677554, 0, 0, 0, 1, -0.11798972, 0.71222186, 0)
+mesh = SubResource("PrismMesh_f6a36")
+
+[node name="Ear2" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Ears" unique_id=2035303424]
+transform = Transform3D(0.9668234, 0.25544578, 0, -0.25544578, 0.9668234, 0, 0, 0, 1, 0.118, 0.712, 0)
+mesh = SubResource("PrismMesh_f6a36")
+
+[node name="Kimono" type="MeshInstance3D" parent="Player/Ryu/Visual/Body" unique_id=966499836]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.059388876, 0)
+mesh = SubResource("CylinderMesh_f6a36")
+
+[node name="Pants" type="MeshInstance3D" parent="Player/Ryu/Visual/Body" unique_id=2064528259]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3774501, 0)
+mesh = SubResource("CylinderMesh_mlc7w")
+
+[node name="Hatayate" type="MeshInstance3D" parent="Player/Ryu/Visual/Body" unique_id=1190210913]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4887389, 0)
+mesh = SubResource("CylinderMesh_80gdj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Hatayate" unique_id=326751410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2970521)
+mesh = SubResource("SphereMesh_f6a36")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Hatayate/MeshInstance3D" unique_id=780315096]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.0231133, -0.16352344, -0.024683118)
+mesh = SubResource("BoxMesh_5pd38")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Hatayate/MeshInstance3D" unique_id=852710295]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.023, -0.164, -0.025)
+mesh = SubResource("BoxMesh_5pd38")
+
+[node name="Tail" type="MeshInstance3D" parent="Player/Ryu/Visual/Body" unique_id=561952791]
+transform = Transform3D(-4.0741458e-08, -1.7829231e-08, 0.8, -0.33372432, 1.1391795, 0, -0.9320559, -0.40788528, -3.4969112e-08, 0, -0.060563922, -0.5025192)
+mesh = SubResource("TextMesh_f6a36")
+
+[node name="Sheat" type="MeshInstance3D" parent="Player/Ryu/Visual" unique_id=1107342165]
+transform = Transform3D(1, 0, 0, 0, 0.43750447, -0.89921623, 0, 0.89921623, 0.43750447, 0.34013087, -0.30762696, -0.08662912)
+mesh = SubResource("CylinderMesh_k73tv")
+
+[node name="SheetKatana" type="MeshInstance3D" parent="Player/Ryu/Visual/Sheat" unique_id=1699280396]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1052244, -0.0030614138)
+mesh = SubResource("CapsuleMesh_5pd38")
+
+[node name="Tsubasa" type="MeshInstance3D" parent="Player/Ryu/Visual/Sheat/SheetKatana" unique_id=496217694]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19646633, 0)
+mesh = SubResource("CylinderMesh_t5jfb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player/Ryu/Visual/Sheat/SheetKatana" unique_id=1535411748]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3010323, 0)
+mesh = SubResource("CylinderMesh_5pd38")
+
+[node name="HandKatana" type="MeshInstance3D" parent="Player/Ryu/Visual" unique_id=1628581295]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5132663, 0, 0)
+visible = false
+mesh = SubResource("CapsuleMesh_5pd38")
+
+[node name="Tsubasa" type="MeshInstance3D" parent="Player/Ryu/Visual/HandKatana" unique_id=1404452408]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19646633, 0)
+mesh = SubResource("CylinderMesh_t5jfb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player/Ryu/Visual/HandKatana" unique_id=1401283597]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3010323, 0)
+mesh = SubResource("CylinderMesh_5pd38")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Ryu" unique_id=751194653]
 shape = SubResource("CapsuleShape3D_f6a36")
 
-[node name="CameraTarget" type="Marker3D" parent="Ryu" unique_id=1041083470]
+[node name="CameraTarget" type="Marker3D" parent="Player/Ryu" unique_id=1041083470]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29072213, 0)
 
-[node name="Components" type="Node" parent="Ryu" unique_id=1151620033]
+[node name="Components" type="Node" parent="Player/Ryu" unique_id=1151620033]
 
-[node name="MovementComponent" type="Node" parent="Ryu/Components" unique_id=428082150]
+[node name="MovementComponent" type="Node" parent="Player/Ryu/Components" unique_id=428082150 node_paths=PackedStringArray("body")]
+script = ExtResource("6_k73tv")
+body = NodePath("../..")
+config = ExtResource("7_80gdj")
 
-[node name="TargetingComponent" type="Node" parent="Ryu/Components" unique_id=476716893]
+[node name="TargetingComponent" type="Node" parent="Player/Ryu/Components" unique_id=476716893]
+script = ExtResource("9_yu54f")
+
+[node name="PlayerController" type="Node" parent="Player" unique_id=1711927072 node_paths=PackedStringArray("controlled_character", "movement_component", "targeting_component")]
+script = ExtResource("8_0jsky")
+controlled_character = NodePath("../Ryu")
+movement_component = NodePath("../Ryu/Components/MovementComponent")
+targeting_component = NodePath("../Ryu/Components/TargetingComponent")

@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="CharacterMovementConfig" format=3 uid="uid://cnqk7cfkrlsds"]
+
+[ext_resource type="Script" uid="uid://d3boexliuhthf" path="res://game/movement/character_movement_config.gd" id="1_fbi5w"]
+
+[resource]
+script = ExtResource("1_fbi5w")
+metadata/_custom_type_script = "uid://d3boexliuhthf"
