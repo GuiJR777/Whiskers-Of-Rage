@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="GameplayAttributeSet" format=3 uid="uid://b1nofxk71ki6u"]
+
+[ext_resource type="Script" uid="uid://ht4hgbvmd1jw" path="res://addons/wor_gameplay_framework/runtime/attributes/gameplay_attribute.gd" id="1_4x5s8"]
+[ext_resource type="Resource" uid="uid://cm7g4p3wyrcw4" path="res://game/attributes/definitions/health.tres" id="2_c03ub"]
+[ext_resource type="Script" uid="uid://cbusf2dhwtxld" path="res://addons/wor_gameplay_framework/runtime/attributes/gameplay_attribute_set.gd" id="2_nbonk"]
+[ext_resource type="Resource" uid="uid://do5tec1ldme7l" path="res://game/attributes/definitions/attack.tres" id="3_2g7ww"]
+[ext_resource type="Resource" uid="uid://byw3hltalvxxo" path="res://game/attributes/definitions/defense.tres" id="4_1uvq5"]
+[ext_resource type="Resource" uid="uid://dqo5qgumsjl6y" path="res://game/attributes/definitions/max_health.tres" id="5_hx8um"]
+[ext_resource type="Resource" uid="uid://dcbyppwrjml1c" path="res://game/attributes/definitions/max_poise.tres" id="6_sfs6j"]
+[ext_resource type="Resource" uid="uid://epfd3vl0yyrr" path="res://game/attributes/definitions/poise.tres" id="7_ewd8a"]
+
+[resource]
+script = ExtResource("2_nbonk")
+attributes = Array[ExtResource("1_4x5s8")]([ExtResource("2_c03ub"), ExtResource("3_2g7ww"), ExtResource("4_1uvq5"), ExtResource("5_hx8um"), ExtResource("6_sfs6j"), ExtResource("7_ewd8a")])
+metadata/_custom_type_script = "uid://cbusf2dhwtxld"

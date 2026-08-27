@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="GameplayAttribute" format=3 uid="uid://dcbyppwrjml1c"]
+
+[ext_resource type="Script" uid="uid://ht4hgbvmd1jw" path="res://addons/wor_gameplay_framework/runtime/attributes/gameplay_attribute.gd" id="1_18m3b"]
+
+[resource]
+script = ExtResource("1_18m3b")
+attribute_name = &"MaxPoise"
+default_value = 50.0
+minimum_value = 50.0
+maximum_value = 10000.0

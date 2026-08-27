@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="GameplayAttribute" format=3 uid="uid://cm7g4p3wyrcw4"]
+
+[ext_resource type="Script" uid="uid://ht4hgbvmd1jw" path="res://addons/wor_gameplay_framework/runtime/attributes/gameplay_attribute.gd" id="1_3dvv4"]
+
+[resource]
+script = ExtResource("1_3dvv4")
+attribute_name = &"Health"
+default_value = 100.0
+minimum_value = 0.0
+maximum_value = 1000.0
+metadata/_custom_type_script = "uid://ht4hgbvmd1jw"
