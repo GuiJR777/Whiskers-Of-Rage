@@ -1,7 +1,32 @@
-[gd_resource type="Resource" script_class="GameplayTagCatalog" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="GameplayTagCatalog" format=3 uid="uid://cciyij01w4aai"]
 
-[ext_resource type="Script" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" uid="uid://cys3sjyqkqhlj" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" uid="uid://csie0hg80rn6i" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag.gd" id="2_manq0"]
+
+[sub_resource type="Resource" id="Resource_u2tea"]
+script = ExtResource("2_manq0")
+tag_name = &"State.Grounded"
+
+[sub_resource type="Resource" id="Resource_manq0"]
+script = ExtResource("2_manq0")
+tag_name = &"State.Airborne"
+
+[sub_resource type="Resource" id="Resource_re21l"]
+script = ExtResource("2_manq0")
+tag_name = &"State.Jumping"
+
+[sub_resource type="Resource" id="Resource_o0w6w"]
+script = ExtResource("2_manq0")
+tag_name = &"State.Falling"
+
+[sub_resource type="Resource" id="Resource_rdaxo"]
+script = ExtResource("2_manq0")
+tag_name = &"State.Idle"
+
+[sub_resource type="Resource" id="Resource_5c1ds"]
+script = ExtResource("2_manq0")
+tag_name = &"State.Moving"
 
 [resource]
 script = ExtResource("1_catalog")
-tags = Array[ExtResource("1_catalog")]([])
+tags = Array[ExtResource("2_manq0")]([SubResource("Resource_u2tea"), SubResource("Resource_manq0"), SubResource("Resource_re21l"), SubResource("Resource_o0w6w"), SubResource("Resource_rdaxo"), SubResource("Resource_5c1ds")])

@@ -61,6 +61,12 @@ func _process(_delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _process_release_mouse_action(event):
+		return
+
+	if _process_capture_mouse_action(event):
+		return
+
 	if not _gameplay_input_enabled:
 		return
 
@@ -109,10 +115,14 @@ func consume_mouse_delta() -> Vector2:
 
 
 func capture_mouse() -> void:
+	_mouse_delta = Vector2.ZERO
+
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
 func release_mouse() -> void:
+	_mouse_delta = Vector2.ZERO
+
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
@@ -181,11 +191,17 @@ func register_buffered_action(
 		)
 		return
 
-	_buffered_actions[action] = maxf(buffer_window, 0.0)
+	_buffered_actions[action] = maxf(
+		buffer_window,
+		0.0
+	)
 
 
-func unregister_buffered_action(action: StringName) -> void:
+func unregister_buffered_action(
+	action: StringName
+) -> void:
 	_buffered_actions.erase(action)
+
 	clear_buffered_action(action)
 
 
@@ -193,7 +209,9 @@ func unregister_buffered_action(action: StringName) -> void:
 # Input Buffer Query
 # ============================================================================
 
-func has_buffered_action(action: StringName) -> bool:
+func has_buffered_action(
+	action: StringName
+) -> bool:
 	_remove_expired_buffer_entries()
 
 	for entry: InputBufferEntry in _buffer:
@@ -203,10 +221,14 @@ func has_buffered_action(action: StringName) -> bool:
 	return false
 
 
-func consume_buffered_action(action: StringName) -> bool:
+func consume_buffered_action(
+	action: StringName
+) -> bool:
 	_remove_expired_buffer_entries()
 
-	for index: int in range(_buffer.size()):
+	for index: int in range(
+		_buffer.size()
+	):
 		var entry := _buffer[index]
 
 		if entry.action != action:
@@ -219,8 +241,14 @@ func consume_buffered_action(action: StringName) -> bool:
 	return false
 
 
-func clear_buffered_action(action: StringName) -> void:
-	for index: int in range(_buffer.size() - 1, -1, -1):
+func clear_buffered_action(
+	action: StringName
+) -> void:
+	for index: int in range(
+		_buffer.size() - 1,
+		-1,
+		-1
+	):
 		if _buffer[index].action == action:
 			_buffer.remove_at(index)
 
@@ -230,32 +258,97 @@ func clear_buffer() -> void:
 
 
 # ============================================================================
-# Private
+# Private - Mouse Capture
 # ============================================================================
 
-func _process_mouse_event(event: InputEvent) -> void:
+func _process_release_mouse_action(
+	event: InputEvent
+) -> bool:
+	if event is not InputEventKey:
+		return false
+
+	var key_event := event as InputEventKey
+
+	if (
+		key_event.pressed
+		and not key_event.echo
+		and key_event.keycode == KEY_ESCAPE
+	):
+		release_mouse()
+
+		return true
+
+	return false
+
+
+func _process_capture_mouse_action(
+	event: InputEvent
+) -> bool:
+	if event is not InputEventMouseButton:
+		return false
+
+	var mouse_event := event as InputEventMouseButton
+
+	if (
+		mouse_event.pressed
+		and mouse_event.button_index
+			== MOUSE_BUTTON_LEFT
+		and Input.mouse_mode
+			!= Input.MOUSE_MODE_CAPTURED
+	):
+		capture_mouse()
+
+		return true
+
+	return false
+
+
+# ============================================================================
+# Private - Mouse Motion
+# ============================================================================
+
+func _process_mouse_event(
+	event: InputEvent
+) -> void:
 	if event is not InputEventMouseMotion:
 		return
 
-	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+	if (
+		Input.mouse_mode
+		!= Input.MOUSE_MODE_CAPTURED
+	):
 		return
 
-	var mouse_event := event as InputEventMouseMotion
+	var mouse_event := (
+		event as InputEventMouseMotion
+	)
 
 	_mouse_delta += mouse_event.relative
 
 
-func _process_buffered_actions(event: InputEvent) -> void:
+# ============================================================================
+# Private - Input Buffer
+# ============================================================================
+
+func _process_buffered_actions(
+	event: InputEvent
+) -> void:
 	if event is InputEventKey:
 		var key_event := event as InputEventKey
 
 		if key_event.echo:
 			return
 
-	for action_variant: Variant in _buffered_actions.keys():
-		var action := StringName(action_variant)
+	for action_variant: Variant in (
+		_buffered_actions.keys()
+	):
+		var action := StringName(
+			action_variant
+		)
 
-		if not event.is_action_pressed(action):
+		if not event.is_action_pressed(
+			action
+		):
 			continue
 
 		var buffer_window: float = float(
@@ -272,7 +365,8 @@ func _add_buffer_entry(
 	action: StringName,
 	buffer_window: float
 ) -> void:
-	# Mantemos apenas a entrada mais recente da mesma action.
+	# Mantém apenas a entrada mais recente
+	# da mesma action.
 	clear_buffered_action(action)
 
 	_buffer.append(
@@ -285,12 +379,23 @@ func _add_buffer_entry(
 
 
 func _remove_expired_buffer_entries() -> void:
-	var current_time := _get_current_time()
+	var current_time := (
+		_get_current_time()
+	)
 
-	for index: int in range(_buffer.size() - 1, -1, -1):
-		if _buffer[index].is_expired(current_time):
+	for index: int in range(
+		_buffer.size() - 1,
+		-1,
+		-1
+	):
+		if _buffer[index].is_expired(
+			current_time
+		):
 			_buffer.remove_at(index)
 
 
 func _get_current_time() -> float:
-	return Time.get_ticks_msec() * 0.001
+	return (
+		Time.get_ticks_msec()
+		* 0.001
+	)

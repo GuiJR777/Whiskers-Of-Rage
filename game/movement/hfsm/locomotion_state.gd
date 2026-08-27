@@ -35,6 +35,9 @@ func exit() -> void:
 		active_child.exit()
 		active_child = null
 
+	if machine != null:
+		machine.notify_state_exited(self)
+
 
 func physics_update(delta: float) -> void:
 	if active_child != null:

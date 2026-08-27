@@ -13,12 +13,13 @@
 [ext_resource type="Script" uid="uid://bvff6yf1rcj4r" path="res://addons/wor_gameplay_framework/runtime/ability_system_component.gd" id="9_jcwrd"]
 [ext_resource type="Script" uid="uid://bste3e18adw41" path="res://game/combat/targeting/targeting_component.gd" id="9_yu54f"]
 [ext_resource type="Script" uid="uid://cbusf2dhwtxld" path="res://addons/wor_gameplay_framework/runtime/attributes/gameplay_attribute_set.gd" id="10_ovd1s"]
-[ext_resource type="Resource" uid="uid://b1nofxk71ki6u" path="res://game/attributes/character/ryu/ryu_attributes.tres" id="11_p4i1k"]
+[ext_resource type="Resource" uid="uid://dpwg5mnv0a737" path="res://game/characters/player/ryu/resources/ryu_attributes.tres" id="11_p4i1k"]
 [ext_resource type="Script" uid="uid://dl7t82wblj7w1" path="res://game/movement/hfsm/character_locomotion_state_machine.gd" id="11_vyjw0"]
 [ext_resource type="Script" uid="uid://qir6dq4n1vo4" path="res://game/movement/hfsm/grounded_locomotion_state.gd" id="12_jcwrd"]
 [ext_resource type="Script" uid="uid://bbhbw52pdobdn" path="res://game/movement/hfsm/locomotion_state.gd" id="13_eoy44"]
 [ext_resource type="Script" uid="uid://dg88akxm50nt0" path="res://game/movement/hfsm/airborne_locomotion_state.gd" id="14_ovd1s"]
-[ext_resource type="Resource" uid="uid://n4ppxyu86ppx" path="res://game/attributes/enemies/target_dummy/target_dummy_attributes.tres" id="19_p4i1k"]
+[ext_resource type="Script" uid="uid://h7gkevj1y7m" path="res://game/movement/bridges/locomotion_gameplay_bridge.gd" id="19_8wnq3"]
+[ext_resource type="Resource" uid="uid://x2hp8wcmjug" path="res://development/test_actors/target_dummy/resources/target_dummy_attributes.tres" id="19_m1xnf"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0ojxy"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -447,7 +448,10 @@ state_id = &"Jumping"
 script = ExtResource("13_eoy44")
 state_id = &"Falling"
 
-[node name="LocomotionGameplayBridge" type="Node" parent="Player/Ryu/Components" unique_id=920681205]
+[node name="LocomotionGameplayBridge" type="Node" parent="Player/Ryu/Components" unique_id=920681205 node_paths=PackedStringArray("locomotion_state_machine", "ability_system")]
+script = ExtResource("19_8wnq3")
+locomotion_state_machine = NodePath("../LocomotionHFSM")
+ability_system = NodePath("../AbilitySystemComponent")
 
 [node name="CombatTest" type="Node3D" parent="." unique_id=1595079260]
 
@@ -464,5 +468,5 @@ shape = SubResource("CapsuleShape3D_t5jfb")
 
 [node name="AbilitySystemComponent" type="Node" parent="CombatTest/Dummy/Components" unique_id=487245054]
 script = ExtResource("9_jcwrd")
-initial_attribute_sets = Array[ExtResource("10_ovd1s")]([ExtResource("19_p4i1k")])
+initial_attribute_sets = Array[ExtResource("10_ovd1s")]([ExtResource("19_m1xnf")])
 metadata/_custom_type_script = "uid://bvff6yf1rcj4r"

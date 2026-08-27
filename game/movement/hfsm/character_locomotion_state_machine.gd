@@ -3,6 +3,7 @@ extends Node
 
 
 signal state_entered(state_id: StringName)
+signal state_exited(state_id: StringName)
 
 
 @export_category("References")
@@ -130,15 +131,48 @@ func transition_root_state(
 		_active_root_state.exit()
 
 	_active_root_state = next_state
+
 	_active_root_state.enter()
 
 
 func notify_state_entered(
 	state: LocomotionState
 ) -> void:
+	if state == null:
+		return
+
 	state_entered.emit(
 		state.state_id
 	)
+
+
+func notify_state_exited(
+	state: LocomotionState
+) -> void:
+	if state == null:
+		return
+
+	state_exited.emit(
+		state.state_id
+	)
+
+
+func get_active_state_ids() -> Array[StringName]:
+	var result: Array[StringName] = []
+
+	var current_state := _active_root_state
+
+	while current_state != null:
+		if current_state.state_id != &"":
+			result.append(
+				current_state.state_id
+			)
+
+		current_state = (
+			current_state.active_child
+		)
+
+	return result
 
 
 func get_jump_buffer_time() -> float:
