@@ -8,13 +8,22 @@ extends Node
 var controlled_character: CharacterBody3D
 
 
-@export_category("Components")
+@export_category("Locomotion")
 
 @export
 var locomotion_state_machine: CharacterLocomotionStateMachine
 
 @export
 var targeting_component: TargetingComponent
+
+
+@export_category("Combat")
+
+@export
+var light_attack_hitbox: HitboxComponent
+
+@export
+var light_attack_definition: MeleeAttackDefinition
 
 
 @export_category("Camera")
@@ -34,6 +43,12 @@ func _ready() -> void:
 		InputManager.JUMP,
 		locomotion_state_machine.get_jump_buffer_time()
 	)
+
+	if light_attack_definition != null:
+		InputManager.register_buffered_action(
+			InputManager.LIGHT_ATTACK,
+			light_attack_definition.input_buffer_time
+		)
 
 
 func _physics_process(delta: float) -> void:
@@ -68,6 +83,7 @@ func _physics_process(delta: float) -> void:
 			)
 
 		_process_jump_input()
+		_process_combat_input()
 
 	locomotion_state_machine.set_movement_intent(
 		move_direction,
@@ -95,6 +111,33 @@ func _process_jump_input() -> void:
 		InputManager.JUMP
 	):
 		locomotion_state_machine.release_jump()
+
+
+func _process_combat_input() -> void:
+	if light_attack_hitbox == null:
+		return
+
+	if light_attack_definition == null:
+		return
+
+	if not InputManager.has_buffered_action(
+		InputManager.LIGHT_ATTACK
+	):
+		return
+
+	var accepted := (
+		light_attack_hitbox
+		.try_activate_attack(
+			light_attack_definition
+		)
+	)
+
+	if not accepted:
+		return
+
+	InputManager.consume_buffered_action(
+		InputManager.LIGHT_ATTACK
+	)
 
 
 func _get_camera_relative_direction(
