@@ -11,9 +11,6 @@ var body: CharacterBody3D
 var config: CharacterMovementConfig
 
 
-var _gravity: float = 9.8
-
-
 func _ready() -> void:
 	if body == null:
 		push_error(
@@ -25,53 +22,97 @@ func _ready() -> void:
 			"MovementComponent requires a CharacterMovementConfig."
 		)
 
-	_gravity = float(
-		ProjectSettings.get_setting(
-			"physics/3d/default_gravity",
-			9.8
-		)
-	)
 
-
-func move_character(
+func move_ground(
 	delta: float,
 	move_direction: Vector3,
-	facing_direction: Vector3 = Vector3.ZERO
+	facing_direction: Vector3
 ) -> void:
-	if body == null or config == null:
+	if not _is_valid():
 		return
 
 	_update_horizontal_velocity(
 		move_direction,
-		delta
+		delta,
+		1.0
 	)
 
-	_update_gravity(delta)
+	if not body.is_on_floor():
+		_apply_gravity(delta)
+	elif body.velocity.y < 0.0:
+		body.velocity.y = 0.0
 
-	var desired_facing := facing_direction
-
-	if desired_facing.is_zero_approx():
-		desired_facing = move_direction
-
-	if not desired_facing.is_zero_approx():
-		_rotate_towards(
-			desired_facing,
-			delta
-		)
+	_update_rotation(
+		facing_direction,
+		delta
+	)
 
 	body.move_and_slide()
 
 
-func stop(delta: float) -> void:
-	move_character(
+func move_air(
+	delta: float,
+	move_direction: Vector3,
+	facing_direction: Vector3
+) -> void:
+	if not _is_valid():
+		return
+
+	_update_horizontal_velocity(
+		move_direction,
 		delta,
-		Vector3.ZERO
+		config.air_control
 	)
+
+	_apply_gravity(delta)
+
+	_update_rotation(
+		facing_direction,
+		delta
+	)
+
+	body.move_and_slide()
+
+
+func start_jump() -> void:
+	if not _is_valid():
+		return
+
+	body.velocity.y = (
+		config.get_jump_velocity()
+	)
+
+
+func cut_jump() -> void:
+	if not _is_valid():
+		return
+
+	if body.velocity.y <= 0.0:
+		return
+
+	body.velocity.y *= (
+		config.jump_cut_multiplier
+	)
+
+
+func is_rising() -> bool:
+	if body == null:
+		return false
+
+	return body.velocity.y > 0.01
+
+
+func is_falling() -> bool:
+	if body == null:
+		return false
+
+	return body.velocity.y < -0.01
 
 
 func _update_horizontal_velocity(
 	direction: Vector3,
-	delta: float
+	delta: float,
+	control_multiplier: float
 ) -> void:
 	var desired_direction := direction
 
@@ -93,35 +134,33 @@ func _update_horizontal_velocity(
 	if desired_direction.is_zero_approx():
 		change_rate = config.deceleration
 
-	current_velocity = current_velocity.move_toward(
-		target_velocity,
-		change_rate * delta
+	change_rate *= control_multiplier
+
+	current_velocity = (
+		current_velocity.move_toward(
+			target_velocity,
+			change_rate * delta
+		)
 	)
 
 	body.velocity.x = current_velocity.x
 	body.velocity.z = current_velocity.y
 
 
-func _update_gravity(delta: float) -> void:
-	if body.is_on_floor():
-		if body.velocity.y < 0.0:
-			body.velocity.y = 0.0
+func _apply_gravity(delta: float) -> void:
+	var gravity := config.get_fall_gravity()
 
-		return
+	if body.velocity.y > 0.0:
+		gravity = config.get_jump_gravity()
 
-	body.velocity.y -= (
-		_gravity
-		* config.gravity_scale
-		* delta
-	)
+	body.velocity.y -= gravity * delta
 
 
-func _rotate_towards(
+func _update_rotation(
 	direction: Vector3,
 	delta: float
 ) -> void:
 	var flat_direction := direction
-
 	flat_direction.y = 0.0
 
 	if flat_direction.is_zero_approx():
@@ -146,4 +185,11 @@ func _rotate_towards(
 		body.rotation.y,
 		target_yaw,
 		rotation_weight
+	)
+
+
+func _is_valid() -> bool:
+	return (
+		body != null
+		and config != null
 	)

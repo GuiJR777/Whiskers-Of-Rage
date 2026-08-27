@@ -11,7 +11,7 @@ var controlled_character: CharacterBody3D
 @export_category("Components")
 
 @export
-var movement_component: MovementComponent
+var locomotion_state_machine: CharacterLocomotionStateMachine
 
 @export
 var targeting_component: TargetingComponent
@@ -23,44 +23,78 @@ var targeting_component: TargetingComponent
 var camera_override: Camera3D
 
 
+func _ready() -> void:
+	if locomotion_state_machine == null:
+		push_error(
+			"PlayerController requires a LocomotionHFSM."
+		)
+		return
+
+	InputManager.register_buffered_action(
+		InputManager.JUMP,
+		locomotion_state_machine.get_jump_buffer_time()
+	)
+
+
 func _physics_process(delta: float) -> void:
 	if controlled_character == null:
 		return
 
-	if movement_component == null:
+	if locomotion_state_machine == null:
 		return
 
-	if not InputManager.is_gameplay_input_enabled():
-		movement_component.stop(delta)
-		return
+	var move_direction := Vector3.ZERO
+	var facing_direction := Vector3.ZERO
 
-	_process_movement(delta)
-
-
-func _process_movement(delta: float) -> void:
-	var input_vector := InputManager.get_move_vector()
-
-	var move_direction := (
-		_get_camera_relative_direction(
-			input_vector
-		)
-	)
-
-	var facing_direction := move_direction
-
-	if (
-		targeting_component != null
-		and targeting_component.has_locked_target()
-	):
-		facing_direction = (
-			_get_locked_target_direction()
+	if InputManager.is_gameplay_input_enabled():
+		var input_vector := (
+			InputManager.get_move_vector()
 		)
 
-	movement_component.move_character(
-		delta,
+		move_direction = (
+			_get_camera_relative_direction(
+				input_vector
+			)
+		)
+
+		facing_direction = move_direction
+
+		if (
+			targeting_component != null
+			and targeting_component.has_locked_target()
+		):
+			facing_direction = (
+				_get_locked_target_direction()
+			)
+
+		_process_jump_input()
+
+	locomotion_state_machine.set_movement_intent(
 		move_direction,
 		facing_direction
 	)
+
+	locomotion_state_machine.tick(delta)
+
+
+func _process_jump_input() -> void:
+	if InputManager.has_buffered_action(
+		InputManager.JUMP
+	):
+		var accepted := (
+			locomotion_state_machine
+			.request_jump()
+		)
+
+		if accepted:
+			InputManager.consume_buffered_action(
+				InputManager.JUMP
+			)
+
+	if InputManager.is_action_just_released(
+		InputManager.JUMP
+	):
+		locomotion_state_machine.release_jump()
 
 
 func _get_camera_relative_direction(
