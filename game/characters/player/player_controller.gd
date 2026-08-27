@@ -20,10 +20,7 @@ var targeting_component: TargetingComponent
 @export_category("Combat")
 
 @export
-var light_attack_hitbox: HitboxComponent
-
-@export
-var light_attack_definition: MeleeAttackDefinition
+var ability_system: AbilitySystemComponent
 
 
 @export_category("Camera")
@@ -44,11 +41,9 @@ func _ready() -> void:
 		locomotion_state_machine.get_jump_buffer_time()
 	)
 
-	if light_attack_definition != null:
-		InputManager.register_buffered_action(
-			InputManager.LIGHT_ATTACK,
-			light_attack_definition.input_buffer_time
-		)
+	InputManager.register_buffered_action(
+		InputManager.LIGHT_ATTACK
+	)
 
 
 func _physics_process(delta: float) -> void:
@@ -114,10 +109,7 @@ func _process_jump_input() -> void:
 
 
 func _process_combat_input() -> void:
-	if light_attack_hitbox == null:
-		return
-
-	if light_attack_definition == null:
+	if ability_system == null:
 		return
 
 	if not InputManager.has_buffered_action(
@@ -125,10 +117,18 @@ func _process_combat_input() -> void:
 	):
 		return
 
+	var context := AbilityContext.create(
+		ability_system,
+		null,
+		controlled_character
+	)
+
 	var accepted := (
-		light_attack_hitbox
-		.try_activate_attack(
-			light_attack_definition
+		ability_system
+		.try_activate_ability_by_tag_name(
+			WORGameplayTags
+				.ABILITY_ATTACK_LIGHT_01,
+			context
 		)
 	)
 

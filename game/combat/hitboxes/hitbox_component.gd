@@ -16,6 +16,12 @@ signal hit_confirmed(
 )
 
 
+@export_category("Identity")
+
+@export
+var hitbox_id: StringName = &""
+
+
 @export_category("Gameplay")
 
 @export
@@ -27,14 +33,17 @@ var instigator: Node3D
 
 var _active_attack: MeleeAttackDefinition
 
-var _remaining_time: float = 0.0
-
 var _is_active: bool = false
 
 var _hit_targets: Dictionary = {}
 
 
 func _ready() -> void:
+	if hitbox_id == &"":
+		push_error(
+			"HitboxComponent requires a hitbox_id."
+		)
+
 	if source_asc == null:
 		push_error(
 			"HitboxComponent requires a source AbilitySystemComponent."
@@ -51,20 +60,8 @@ func _ready() -> void:
 		_on_area_entered
 	)
 
-	set_physics_process(false)
 
-
-func _physics_process(delta: float) -> void:
-	if not _is_active:
-		return
-
-	_remaining_time -= delta
-
-	if _remaining_time <= 0.0:
-		deactivate()
-
-
-func try_activate_attack(
+func activate_attack(
 	attack: MeleeAttackDefinition
 ) -> bool:
 	if _is_active:
@@ -76,13 +73,16 @@ func try_activate_attack(
 		)
 		return false
 
-	var validation_errors := attack.validate()
+	var validation_errors := (
+		attack.validate()
+	)
 
 	if not validation_errors.is_empty():
 		push_error(
 			"Cannot activate invalid melee attack: %s"
 			% "; ".join(validation_errors)
 		)
+
 		return false
 
 	if source_asc == null:
@@ -90,15 +90,9 @@ func try_activate_attack(
 
 	_active_attack = attack
 
-	_remaining_time = (
-		attack.hitbox_active_time
-	)
-
 	_hit_targets.clear()
 
 	_is_active = true
-
-	set_physics_process(true)
 
 	set_deferred(
 		"monitoring",
@@ -116,15 +110,14 @@ func deactivate() -> void:
 	if not _is_active:
 		return
 
-	var previous_attack := _active_attack
+	var previous_attack := (
+		_active_attack
+	)
 
 	_is_active = false
 	_active_attack = null
-	_remaining_time = 0.0
 
 	_hit_targets.clear()
-
-	set_physics_process(false)
 
 	set_deferred(
 		"monitoring",
@@ -163,7 +156,6 @@ func _on_area_entered(
 	if target_asc == null:
 		return
 
-	# Nunca acertar o próprio ASC.
 	if target_asc == source_asc:
 		return
 
@@ -171,9 +163,9 @@ func _on_area_entered(
 		target_asc.get_instance_id()
 	)
 
-	# Um mesmo ataque só acerta
-	# o mesmo ator uma vez.
-	if _hit_targets.has(target_id):
+	if _hit_targets.has(
+		target_id
+	):
 		return
 
 	_hit_targets[target_id] = true

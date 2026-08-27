@@ -195,6 +195,68 @@ func get_active_ability_handles() -> Array[int]:
 			handles.append(handle)
 	return handles
 
+func find_ability_handle_by_tag_name(
+	tag_name: StringName,
+	exact_match: bool = true
+) -> int:
+	if not GameplayTag.is_valid_tag_name(
+		tag_name
+	):
+		return INVALID_ABILITY_HANDLE
+
+	for handle: int in get_ability_handles():
+		var spec := (
+			get_ability_spec(
+				handle
+			)
+		)
+
+		if (
+			spec == null
+			or spec.definition == null
+			or spec.definition.ability_tag == null
+		):
+			continue
+
+		var ability_tag_name := (
+			spec.definition
+			.ability_tag
+			.tag_name
+		)
+
+		if exact_match:
+			if ability_tag_name == tag_name:
+				return handle
+		else:
+			if GameplayTag.matches_tag_name(
+				ability_tag_name,
+				tag_name
+			):
+				return handle
+
+	return INVALID_ABILITY_HANDLE
+
+
+func try_activate_ability_by_tag_name(
+	tag_name: StringName,
+	activation_context: AbilityContext = null,
+	exact_match: bool = true
+) -> bool:
+	var handle := (
+		find_ability_handle_by_tag_name(
+			tag_name,
+			exact_match
+		)
+	)
+
+	if handle == INVALID_ABILITY_HANDLE:
+		return false
+
+	return try_activate_ability(
+		handle,
+		activation_context
+	)
+
 
 func can_activate_ability(handle: int) -> StringName:
 	var spec: AbilitySpec = _ability_specs.get(handle)
