@@ -42,6 +42,11 @@ var _active_context: AbilityContext
 var _active_hitbox: HitboxComponent
 
 
+var _combo_window_open: bool = false
+
+var _preserve_animation_on_cancel: bool = false
+
+
 func _ready() -> void:
 	if ability_system == null:
 		push_error(
@@ -82,7 +87,7 @@ func _ready() -> void:
 
 
 # ============================================================================
-# Animation Method Track API
+# Animation Method Track API - Hitbox
 # ============================================================================
 
 func open_hitbox() -> void:
@@ -110,7 +115,8 @@ func open_hitbox() -> void:
 		return
 
 	if not hitbox.activate_attack(
-		_active_binding.attack_definition
+		_active_binding.attack_definition,
+		_active_ability
 	):
 		return
 
@@ -124,6 +130,49 @@ func close_hitbox() -> void:
 	_active_hitbox.deactivate()
 
 	_active_hitbox = null
+
+
+# ============================================================================
+# Animation Method Track API - Combo
+# ============================================================================
+
+func open_combo_window() -> void:
+	if _active_ability == null:
+		return
+
+	if _combo_window_open:
+		return
+
+	_combo_window_open = true
+
+	_send_combat_event(
+		WORGameplayTags
+			.EVENT_COMBAT_COMBO_WINDOW_OPEN
+	)
+
+
+func close_combo_window() -> void:
+	if not _combo_window_open:
+		return
+
+	_combo_window_open = false
+
+	_send_combat_event(
+		WORGameplayTags
+			.EVENT_COMBAT_COMBO_WINDOW_CLOSE
+	)
+
+
+# ============================================================================
+# Combo Transition
+# ============================================================================
+
+func prepare_combo_transition() -> void:
+	_preserve_animation_on_cancel = true
+
+
+func cancel_combo_transition() -> void:
+	_preserve_animation_on_cancel = false
 
 
 # ============================================================================
@@ -172,6 +221,9 @@ func _on_ability_activated(
 
 	close_hitbox()
 
+	if _combo_window_open:
+		close_combo_window()
+
 	_active_handle = handle
 	_active_ability = ability
 	_active_binding = binding
@@ -183,7 +235,8 @@ func _on_ability_activated(
 	)
 
 	animation_player.play(
-		binding.animation_name
+		binding.animation_name,
+		binding.transition_blend_time
 	)
 
 
@@ -229,6 +282,9 @@ func _on_animation_finished(
 
 	close_hitbox()
 
+	if _combo_window_open:
+		close_combo_window()
+
 	var event_context := (
 		_active_context.duplicate_context()
 		if _active_context != null
@@ -243,6 +299,10 @@ func _on_animation_finished(
 		ability_system
 	)
 
+	event_context.ability = (
+		_active_ability
+	)
+
 	var event := GameplayEvent.create(
 		animation_finished_event_tag,
 		event_context,
@@ -254,7 +314,7 @@ func _on_animation_finished(
 				_active_ability
 				.ability_tag
 				.tag_name
-			)
+			),
 		}
 	)
 
@@ -266,16 +326,27 @@ func _on_animation_finished(
 func _finish_active_ability(
 	cancel_animation: bool
 ) -> void:
+	var preserve_animation := (
+		cancel_animation
+		and _preserve_animation_on_cancel
+	)
+
 	close_hitbox()
+
+	if _combo_window_open:
+		close_combo_window()
 
 	if (
 		cancel_animation
+		and not preserve_animation
 		and animation_player.is_playing()
 		and _active_binding != null
 		and animation_player.current_animation
 			== _active_binding.animation_name
 	):
 		animation_player.stop()
+
+	_preserve_animation_on_cancel = false
 
 	_active_handle = (
 		AbilitySystemComponent
@@ -285,6 +356,58 @@ func _finish_active_ability(
 	_active_ability = null
 	_active_binding = null
 	_active_context = null
+
+
+# ============================================================================
+# Gameplay Events
+# ============================================================================
+
+func _send_combat_event(
+	tag_name: StringName
+) -> void:
+	if ability_system == null:
+		return
+
+	if _active_ability == null:
+		return
+
+	var event_tag := GameplayTag.new()
+
+	event_tag.tag_name = tag_name
+
+	var event_context := (
+		_active_context.duplicate_context()
+		if _active_context != null
+		else AbilityContext.new()
+	)
+
+	event_context.source_asc = (
+		ability_system
+	)
+
+	event_context.target_asc = (
+		ability_system
+	)
+
+	event_context.ability = (
+		_active_ability
+	)
+
+	var event := GameplayEvent.create(
+		event_tag,
+		event_context,
+		{
+			"ability": String(
+				_active_ability
+				.ability_tag
+				.tag_name
+			),
+		}
+	)
+
+	ability_system.send_gameplay_event(
+		event
+	)
 
 
 # ============================================================================

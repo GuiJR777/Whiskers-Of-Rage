@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="MeleeAttackDefinition" format=3 uid="uid://dck614gabq1n1"]
+
+[ext_resource type="Script" uid="uid://csie0hg80rn6i" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag.gd" id="1_r1gy6"]
+[ext_resource type="Script" uid="uid://cq6av1hppr15k" path="res://addons/wor_gameplay_framework/runtime/effects/gameplay_modifier.gd" id="2_k3o1m"]
+[ext_resource type="Script" uid="uid://ht4hgbvmd1jw" path="res://addons/wor_gameplay_framework/runtime/attributes/gameplay_attribute.gd" id="3_04gp6"]
+[ext_resource type="Script" uid="uid://mk4xy2umrvlg" path="res://addons/wor_gameplay_framework/runtime/effects/gameplay_effect.gd" id="4_oyaka"]
+[ext_resource type="Script" uid="uid://ctucb2hkrubla" path="res://game/combat/attacks/melee_attack_definition.gd" id="5_bgj5b"]
+
+[sub_resource type="Resource" id="Resource_7exj2"]
+script = ExtResource("3_04gp6")
+attribute_name = &"Health"
+metadata/_custom_type_script = "uid://ht4hgbvmd1jw"
+
+[sub_resource type="Resource" id="Resource_0sk1g"]
+script = ExtResource("2_k3o1m")
+attribute = SubResource("Resource_7exj2")
+magnitude = -18.0
+metadata/_custom_type_script = "uid://cq6av1hppr15k"
+
+[sub_resource type="Resource" id="Resource_hix2f"]
+script = ExtResource("3_04gp6")
+attribute_name = &"Poise"
+metadata/_custom_type_script = "uid://ht4hgbvmd1jw"
+
+[sub_resource type="Resource" id="Resource_80rki"]
+script = ExtResource("2_k3o1m")
+attribute = SubResource("Resource_hix2f")
+magnitude = -25.0
+metadata/_custom_type_script = "uid://cq6av1hppr15k"
+
+[sub_resource type="Resource" id="Resource_xd7te"]
+script = ExtResource("4_oyaka")
+effect_id = &"Effect.Attack.Light.Hit"
+modifiers = Array[ExtResource("2_k3o1m")]([SubResource("Resource_0sk1g"), SubResource("Resource_80rki")])
+metadata/_custom_type_script = "uid://mk4xy2umrvlg"
+
+[resource]
+script = ExtResource("5_bgj5b")
+attack_id = &"LightAttack02"
+hit_effect = SubResource("Resource_xd7te")
+metadata/_custom_type_script = "uid://ctucb2hkrubla"

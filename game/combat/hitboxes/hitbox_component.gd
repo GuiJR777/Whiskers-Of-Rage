@@ -33,6 +33,8 @@ var instigator: Node3D
 
 var _active_attack: MeleeAttackDefinition
 
+var _active_ability: GameplayAbility
+
 var _is_active: bool = false
 
 var _hit_targets: Dictionary = {}
@@ -62,7 +64,8 @@ func _ready() -> void:
 
 
 func activate_attack(
-	attack: MeleeAttackDefinition
+	attack: MeleeAttackDefinition,
+	source_ability: GameplayAbility = null
 ) -> bool:
 	if _is_active:
 		return false
@@ -71,6 +74,7 @@ func activate_attack(
 		push_error(
 			"HitboxComponent received a null attack."
 		)
+
 		return false
 
 	var validation_errors := (
@@ -80,7 +84,9 @@ func activate_attack(
 	if not validation_errors.is_empty():
 		push_error(
 			"Cannot activate invalid melee attack: %s"
-			% "; ".join(validation_errors)
+			% "; ".join(
+				validation_errors
+			)
 		)
 
 		return false
@@ -89,6 +95,7 @@ func activate_attack(
 		return false
 
 	_active_attack = attack
+	_active_ability = source_ability
 
 	_hit_targets.clear()
 
@@ -115,7 +122,9 @@ func deactivate() -> void:
 	)
 
 	_is_active = false
+
 	_active_attack = null
+	_active_ability = null
 
 	_hit_targets.clear()
 
@@ -176,6 +185,8 @@ func _on_area_entered(
 		instigator
 	)
 
+	context.ability = _active_ability
+
 	context.world_position = (
 		hurtbox.global_position
 	)
@@ -192,7 +203,54 @@ func _on_area_entered(
 		context
 	)
 
+	_send_hit_confirmed_event(
+		context
+	)
+
 	hit_confirmed.emit(
 		hurtbox,
 		context
+	)
+
+
+func _send_hit_confirmed_event(
+	context: AbilityContext
+) -> void:
+	if source_asc == null:
+		return
+
+	var event_tag := GameplayTag.new()
+
+	event_tag.tag_name = (
+		WORGameplayTags
+		.EVENT_COMBAT_HIT_CONFIRMED
+	)
+
+	var ability_name: StringName = &""
+
+	if (
+		_active_ability != null
+		and _active_ability.ability_tag != null
+	):
+		ability_name = (
+			_active_ability
+			.ability_tag
+			.tag_name
+		)
+
+	var event := GameplayEvent.create(
+		event_tag,
+		context.duplicate_context(),
+		{
+			"ability": String(
+				ability_name
+			),
+			"attack": String(
+				_active_attack.attack_id
+			),
+		}
+	)
+
+	source_asc.send_gameplay_event(
+		event
 	)

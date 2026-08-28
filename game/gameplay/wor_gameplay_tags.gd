@@ -30,11 +30,32 @@ const ABILITY_ATTACK_LIGHT_01: StringName = (
 	&"Ability.Attack.Light.01"
 )
 
+const ABILITY_ATTACK_LIGHT_02: StringName = (
+	&"Ability.Attack.Light.02"
+)
+
 
 # ============================================================================
-# Gameplay Events
+# Gameplay Events - Animation
 # ============================================================================
 
 const EVENT_ANIMATION_ABILITY_FINISHED: StringName = (
 	&"Event.Animation.AbilityFinished"
+)
+
+
+# ============================================================================
+# Gameplay Events - Combat
+# ============================================================================
+
+const EVENT_COMBAT_HIT_CONFIRMED: StringName = (
+	&"Event.Combat.Hit.Confirmed"
+)
+
+const EVENT_COMBAT_COMBO_WINDOW_OPEN: StringName = (
+	&"Event.Combat.ComboWindow.Open"
+)
+
+const EVENT_COMBAT_COMBO_WINDOW_CLOSE: StringName = (
+	&"Event.Combat.ComboWindow.Close"
 )

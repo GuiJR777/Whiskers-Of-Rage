@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="ComboDefinition" format=3 uid="uid://so6kfybfevgc"]
+
+[ext_resource type="Script" uid="uid://d0jveyq2e4vw5" path="res://game/combat/combos/combo_definition.gd" id="1_2ayyu"]
+[ext_resource type="Script" uid="uid://dbthlbinmlskp" path="res://game/combat/combos/combo_step.gd" id="2_rgy6e"]
+[ext_resource type="Script" uid="uid://csie0hg80rn6i" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag.gd" id="3_rgy6e"]
+
+[sub_resource type="Resource" id="Resource_dbn6f"]
+script = ExtResource("3_rgy6e")
+tag_name = &"Ability.Attack.Light.01"
+
+[sub_resource type="Resource" id="Resource_xitri"]
+script = ExtResource("2_rgy6e")
+ability_tag = SubResource("Resource_dbn6f")
+metadata/_custom_type_script = "uid://dbthlbinmlskp"
+
+[sub_resource type="Resource" id="Resource_emxhy"]
+script = ExtResource("3_rgy6e")
+tag_name = &"Ability.Attack.Light.02"
+
+[sub_resource type="Resource" id="Resource_4woui"]
+script = ExtResource("2_rgy6e")
+ability_tag = SubResource("Resource_emxhy")
+requires_hit_confirm_to_advance = false
+metadata/_custom_type_script = "uid://dbthlbinmlskp"
+
+[resource]
+script = ExtResource("1_2ayyu")
+combo_id = &"LightCombo"
+steps = Array[ExtResource("2_rgy6e")]([SubResource("Resource_xitri"), SubResource("Resource_4woui")])
+metadata/_custom_type_script = "uid://d0jveyq2e4vw5"

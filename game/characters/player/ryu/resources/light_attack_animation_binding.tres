@@ -11,7 +11,7 @@ tag_name = &"Ability.Attack.Light.01"
 [resource]
 script = ExtResource("1_gr08u")
 ability_tag = SubResource("Resource_dbn6f")
-animation_name = &"light_attack_proto"
+animation_name = &"light_attack_01"
 hitbox_id = &"Katana"
 attack_definition = ExtResource("2_sr4l4")
 metadata/_custom_type_script = "uid://jbccc1jhdm17"

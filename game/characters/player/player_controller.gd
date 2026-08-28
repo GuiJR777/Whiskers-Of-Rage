@@ -20,7 +20,7 @@ var targeting_component: TargetingComponent
 @export_category("Combat")
 
 @export
-var ability_system: AbilitySystemComponent
+var combo_component: ComboComponent
 
 
 @export_category("Camera")
@@ -41,8 +41,19 @@ func _ready() -> void:
 		locomotion_state_machine.get_jump_buffer_time()
 	)
 
+	var light_attack_buffer := (
+		InputManager.DEFAULT_BUFFER_WINDOW
+	)
+
+	if combo_component != null:
+		light_attack_buffer = (
+			combo_component
+			.get_input_buffer_time()
+		)
+
 	InputManager.register_buffered_action(
-		InputManager.LIGHT_ATTACK
+		InputManager.LIGHT_ATTACK,
+		light_attack_buffer
 	)
 
 
@@ -109,7 +120,7 @@ func _process_jump_input() -> void:
 
 
 func _process_combat_input() -> void:
-	if ability_system == null:
+	if combo_component == null:
 		return
 
 	if not InputManager.has_buffered_action(
@@ -117,18 +128,10 @@ func _process_combat_input() -> void:
 	):
 		return
 
-	var context := AbilityContext.create(
-		ability_system,
-		null,
-		controlled_character
-	)
-
 	var accepted := (
-		ability_system
-		.try_activate_ability_by_tag_name(
-			WORGameplayTags
-				.ABILITY_ATTACK_LIGHT_01,
-			context
+		combo_component.try_request_input(
+			InputManager.LIGHT_ATTACK,
+			controlled_character
 		)
 	)
 

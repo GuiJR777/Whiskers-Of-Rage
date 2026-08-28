@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="GameplayAbility" format=3 uid="uid://dky1x2mdn25qb"]
+
+[ext_resource type="Script" uid="uid://csie0hg80rn6i" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag.gd" id="1_hxh0a"]
+[ext_resource type="Script" uid="uid://cnumykssfwrgj" path="res://addons/wor_gameplay_framework/runtime/abilities/gameplay_ability.gd" id="2_dhb6d"]
+[ext_resource type="Script" uid="uid://y4ur41ox7knr" path="res://addons/wor_gameplay_framework/runtime/abilities/tasks/ability_task_definition.gd" id="3_0844i"]
+[ext_resource type="Script" uid="uid://b6ucuv87otboi" path="res://addons/wor_gameplay_framework/runtime/abilities/tasks/wait_gameplay_event_ability_task_definition.gd" id="4_efqrt"]
+
+[sub_resource type="Resource" id="Resource_emxhy"]
+script = ExtResource("1_hxh0a")
+tag_name = &"Ability.Attack.Light.02"
+
+[sub_resource type="Resource" id="Tag_attacking_owned"]
+script = ExtResource("1_hxh0a")
+tag_name = &"State.Attacking"
+
+[sub_resource type="Resource" id="Tag_grounded"]
+script = ExtResource("1_hxh0a")
+tag_name = &"State.Grounded"
+
+[sub_resource type="Resource" id="Resource_dbn6f"]
+script = ExtResource("1_hxh0a")
+tag_name = &"Ability.Attack.Light.01"
+
+[sub_resource type="Resource" id="Tag_animation_finished"]
+script = ExtResource("1_hxh0a")
+tag_name = &"Event.Animation.AbilityFinished"
+
+[sub_resource type="Resource" id="Task_wait_animation"]
+script = ExtResource("4_efqrt")
+event_tag = SubResource("Tag_animation_finished")
+exact_match = true
+
+[resource]
+script = ExtResource("2_dhb6d")
+ability_tag = SubResource("Resource_emxhy")
+activation_required_tags = Array[ExtResource("1_hxh0a")]([SubResource("Tag_grounded")])
+activation_owned_tags = Array[ExtResource("1_hxh0a")]([SubResource("Tag_attacking_owned")])
+cancel_abilities_with_tags = Array[ExtResource("1_hxh0a")]([SubResource("Resource_dbn6f")])
+tasks = Array[ExtResource("3_0844i")]([SubResource("Task_wait_animation")])

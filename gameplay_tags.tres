@@ -39,6 +39,22 @@ tag_name = &"Ability.Attack.Light.01"
 script = ExtResource("2_manq0")
 tag_name = &"Event.Animation.AbilityFinished"
 
+[sub_resource type="Resource" id="Resource_emxhy"]
+script = ExtResource("2_manq0")
+tag_name = &"Ability.Attack.Light.02"
+
+[sub_resource type="Resource" id="Resource_bd2bf"]
+script = ExtResource("2_manq0")
+tag_name = &"Event.Combat.Hit.Confirmed"
+
+[sub_resource type="Resource" id="Resource_yw1uf"]
+script = ExtResource("2_manq0")
+tag_name = &"Event.Combat.ComboWindow.Open"
+
+[sub_resource type="Resource" id="Resource_khueq"]
+script = ExtResource("2_manq0")
+tag_name = &"Event.Combat.ComboWindow.Close"
+
 [resource]
 script = ExtResource("1_catalog")
-tags = Array[ExtResource("2_manq0")]([SubResource("Resource_u2tea"), SubResource("Resource_manq0"), SubResource("Resource_re21l"), SubResource("Resource_o0w6w"), SubResource("Resource_rdaxo"), SubResource("Resource_5c1ds"), SubResource("Resource_o1r8d"), SubResource("Resource_dbn6f"), SubResource("Resource_dyglh")])
+tags = Array[ExtResource("2_manq0")]([SubResource("Resource_u2tea"), SubResource("Resource_manq0"), SubResource("Resource_re21l"), SubResource("Resource_o0w6w"), SubResource("Resource_rdaxo"), SubResource("Resource_5c1ds"), SubResource("Resource_o1r8d"), SubResource("Resource_dbn6f"), SubResource("Resource_dyglh"), SubResource("Resource_emxhy"), SubResource("Resource_bd2bf"), SubResource("Resource_yw1uf"), SubResource("Resource_khueq")])

@@ -13,6 +13,9 @@ var ability_tag: GameplayTag
 @export
 var animation_name: StringName = &""
 
+@export_range(0.0, 0.5, 0.01)
+var transition_blend_time: float = 0.05
+
 
 @export_category("Combat")
 

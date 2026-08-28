@@ -91,19 +91,87 @@ func _show_snapshot(snapshot: Dictionary) -> void:
 	_add_rows(root, "Lifecycle Warnings", snapshot.get("lifecycle_warnings", []), [])
 
 
-func _add_rows(parent: TreeItem, title: String, rows: Array, fields: Array[String]) -> void:
-	var section := _tree.create_item(parent)
-	section.set_text(0, "%s (%d)" % [title, rows.size()])
-	section.set_selectable(0, false)
-	section.set_selectable(1, false)
+func _add_rows(
+	parent: TreeItem,
+	title: String,
+	rows: Array,
+	fields: Array[String]
+) -> void:
+	var section := _tree.create_item(
+		parent
+	)
+
+	section.set_text(
+		0,
+		"%s (%d)"
+		% [
+			title,
+			rows.size(),
+		]
+	)
+
+	section.set_selectable(
+		0,
+		false
+	)
+
+	section.set_selectable(
+		1,
+		false
+	)
+
 	for row_variant: Variant in rows:
-		var item := _tree.create_item(section)
+		var item := _tree.create_item(
+			section
+		)
+
 		if row_variant is Dictionary:
-			var row: Dictionary = row_variant
-			item.set_text(0, String(row.get(fields[0], "")) if not fields.is_empty() else "")
+			var row: Dictionary = (
+				row_variant
+			)
+
+			if fields.is_empty():
+				item.set_text(
+					0,
+					""
+				)
+			else:
+				item.set_text(
+					0,
+					str(
+						row.get(
+							fields[0],
+							""
+						)
+					)
+				)
+
 			var values: PackedStringArray = []
-			for field_index: int in range(1, fields.size()):
-				values.append("%s=%s" % [fields[field_index], str(row.get(fields[field_index], ""))])
-			item.set_text(1, ", ".join(values))
+
+			for field_index: int in range(
+				1,
+				fields.size()
+			):
+				values.append(
+					"%s=%s"
+					% [
+						fields[field_index],
+						str(
+							row.get(
+								fields[field_index],
+								""
+							)
+						),
+					]
+				)
+
+			item.set_text(
+				1,
+				", ".join(values)
+			)
+
 		else:
-			item.set_text(0, String(row_variant))
+			item.set_text(
+				0,
+				str(row_variant)
+			)

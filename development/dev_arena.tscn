@@ -19,8 +19,9 @@
 [ext_resource type="Script" uid="uid://qir6dq4n1vo4" path="res://game/movement/hfsm/grounded_locomotion_state.gd" id="12_jcwrd"]
 [ext_resource type="Script" uid="uid://cnumykssfwrgj" path="res://addons/wor_gameplay_framework/runtime/abilities/gameplay_ability.gd" id="13_0wfrg"]
 [ext_resource type="Script" uid="uid://bbhbw52pdobdn" path="res://game/movement/hfsm/locomotion_state.gd" id="13_eoy44"]
-[ext_resource type="Resource" uid="uid://dkp72mpcda0ei" path="res://game/characters/player/ryu/resources/light_attack_ability.tres" id="14_576yk"]
+[ext_resource type="Resource" uid="uid://dv82lx80vbicg" path="res://game/characters/player/ryu/resources/light_attack_ability.tres" id="14_576yk"]
 [ext_resource type="Script" uid="uid://dg88akxm50nt0" path="res://game/movement/hfsm/airborne_locomotion_state.gd" id="14_ovd1s"]
+[ext_resource type="Resource" uid="uid://dky1x2mdn25qb" path="res://game/characters/player/ryu/resources/light_attack_02_ability.tres" id="15_3uay0"]
 [ext_resource type="Script" uid="uid://h7gkevj1y7m" path="res://game/movement/bridges/locomotion_gameplay_bridge.gd" id="19_8wnq3"]
 [ext_resource type="Resource" uid="uid://x2hp8wcmjug" path="res://development/test_actors/target_dummy/resources/target_dummy_attributes.tres" id="19_m1xnf"]
 [ext_resource type="Script" uid="uid://cgkrcrdyrg5gc" path="res://game/combat/hurtboxes/hurtbox_component.gd" id="21_37b0s"]
@@ -28,6 +29,8 @@
 [ext_resource type="Script" uid="uid://csie0hg80rn6i" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag.gd" id="24_nahmr"]
 [ext_resource type="Script" uid="uid://jbccc1jhdm17" path="res://game/combat/animation/combat_animation_binding.gd" id="25_7uu5j"]
 [ext_resource type="Resource" uid="uid://b1ukehkeqvvwy" path="res://game/characters/player/ryu/resources/light_attack_animation_binding.tres" id="26_qchnr"]
+[ext_resource type="Script" uid="uid://vad4ip6d8h6k" path="res://game/combat/combos/combo_component.gd" id="27_qchnr"]
+[ext_resource type="Resource" uid="uid://so6kfybfevgc" path="res://game/characters/player/ryu/resources/light_combo.tres" id="28_3uay0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0ojxy"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -594,14 +597,20 @@ tracks/9/path = NodePath("Components/AnimationCombatBridge")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0.23333333, 0.34),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0.23333333, 0.34, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "values": [{
 "args": [],
 "method": &"open_hitbox"
 }, {
 "args": [],
 "method": &"close_hitbox"
+}, {
+"args": [],
+"method": &"open_combo_window"
+}, {
+"args": [],
+"method": &"close_combo_window"
 }]
 }
 tracks/10/type = "value"
@@ -629,10 +638,330 @@ tracks/11/keys = {
 "values": [Vector3(-0.4292984, -0.2765503, 0.781842), Vector3(-0.36692986, -0.23722488, 0.13942635), Vector3(-0.29416656, -0.19134521, -0.1151917), Vector3(-0.09911728, -0.19134521, -0.32312167), Vector3(0.6849532, -0.19134521, 0.28909284)]
 }
 
+[sub_resource type="Animation" id="Animation_qchnr"]
+resource_name = "light_attack_02"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual/Body:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.050856568, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-1.367115e-08, 0, 0.15637973), Vector3(-5.9001093e-09, 0, 0.067489386), Vector3(-5.9001093e-09, 0, 0.067489386), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual/Body:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.050856568, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.28885868, 0.12555829, 0.0010760592), Vector3(0.09635672, 0.52629155, 0.05583341), Vector3(0.09635672, 0.52629155, 0.05583341), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visual/Body/Hands/Hand:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.38856035, -0.26407042, 0.019814227), Vector3(0.4, -0.291, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visual/Body/Hands/Hand:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.22924197, 0.044160567, -0.078020275), Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visual/Body/Sheat/SheetKatana:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5542062, 0.6050627),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.0006052526, 0.14356175, -0.002104379), Vector3(-0.025552452, 0.38464546, 0.013661623), Vector3(0, 0.1052244, -0.0030614138)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visual/Body/Sheat/SheetKatana:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.5542062),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Visual/Body/Hands/Hand2:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.092585035, 0.2, 0.40033248, 0.44206092, 0.5111737, 0.5568142, 0.5828945, 0.6, 0.6898237, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.58400553, -0.034181714, -0.1448608), Vector3(-0.28739163, -0.018582106, 0.5028934), Vector3(0.102884546, -0.034181714, 0.5264181), Vector3(0.102884546, -0.034181714, 0.5264181), Vector3(-0.15631053, -0.03529811, 0.5546481), Vector3(-0.09148888, -0.00365901, 0.5914278), Vector3(0.24843945, -0.008768082, 0.5463191), Vector3(0.29594183, -0.08532572, 0.3673638), Vector3(0.32709768, -0.13553822, 0.24999088), Vector3(-0.048597842, -0.20535898, 0.4479279), Vector3(-0.4, -0.291, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Visual/Body/Hands/Hand2:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.092585035, 0.2, 0.4, 0.44206092, 0.5111737, 0.5568142, 0.5828945, 0.6, 0.6898237, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.17332697, -1.1343856, -1.2480375), Vector3(-0.17332694, 0.47297978, -1.2480375), Vector3(-0.17332701, 2.3378072, -1.2480373), Vector3(-0.17332701, 2.3378072, -1.2480373), Vector3(-0.039887916, 1.1870378, -1.2470905), Vector3(0.2760797, 2.3758886, -1.2666762), Vector3(0.4176795, 2.9781244, -1.2437503), Vector3(0.46103868, -3.0422165, -1.239405), Vector3(0.461177, -3.1341114, -1.2435352), Vector3(0.25405395, -1.7265245, -0.6850408), Vector3(0, 0, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Visual/Body/Hands/Hand2/HandKatana:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.5542062),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Components/AnimationCombatBridge")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.033333335, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"open_hitbox"
+}, {
+"args": [],
+"method": &"close_hitbox"
+}]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Visual/Body/Sheat/SheetKatana:rotation")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0.5542062),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.076451145, 0.00818423, 0.005061233)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Combat/HitBox/CollisionShape3D:shape:size")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.035208393, 0.05998467, 0.20342627),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.6798096, 0.28295898, 0.85560304), Vector3(0.8551846, 0.28295898, 1.7689195), Vector3(1.8705139, 0.28295898, 1.3304001)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Combat/HitBox/CollisionShape3D:position")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0.035208393, 0.05998467, 0.20342627),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.7679062, -0.2765503, 0.58988035), Vector3(0.64546007, -0.2765503, 0.112666726), Vector3(-0.063438416, -0.2765503, 0.21292192)]
+}
+
+[sub_resource type="Animation" id="Animation_3uay0"]
+resource_name = "light_attack_03"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual/Body:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.24326962, 0.4, 0.4026532, 0.44627395, 0.63250107, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-5.9001093e-09, 0, 0.067489386), Vector3(-1.814704e-08, 0, 0.20757794), Vector3(-1.814704e-08, 0, 0.20757794), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0.35974765, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual/Body:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.24326962, 0.4, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.09635672, 0.52629155, 0.05583341), Vector3(0.33145908, 0.44565418, -0.033663925), Vector3(0.33145908, 0.44565418, -0.033663925), Vector3(0, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visual/Body/Hands/Hand:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.8, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.39146927, -0.27091816, 0.014775809), Vector3(0.39146927, -0.27091816, 0.014775809), Vector3(0.4, -0.291, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visual/Body/Hands/Hand:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.8050627, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.17094967, 0.032931294, -0.05818106), Vector3(-0.17094967, 0.032931294, -0.05818106), Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visual/Body/Hands/Hand2:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.24515474, 0.2612887, 0.30171317, 0.4021223, 0.64760053, 0.6577091, 0.7229098, 0.8, 0.93333334, 1.0666667, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.10288456, -0.034181714, 0.5264181), Vector3(-0.013992518, -0.17027426, 0.6173094), Vector3(-0.013992518, -0.17027426, 0.6173094), Vector3(-0.16794884, -0.0034149885, 0.746233), Vector3(-0.29786363, 0.18285811, 0.6882613), Vector3(-0.61373496, 0.6357579, 0.5473111), Vector3(-0.61373496, 0.6357579, 0.5473111), Vector3(-0.3538112, 0.42419815, 0.47834736), Vector3(-0.04893281, 0.17604852, 0.60738647), Vector3(0.31154087, -0.11735177, 0.30181408), Vector3(-0.062462583, -0.20553017, 0.48677808), Vector3(-0.34530494, -0.24289274, 0.31626448), Vector3(-0.4, -0.291, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visual/Body/Hands/Hand2:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.24515474, 0.2612887, 0.30171317, 0.4021223, 0.64760053, 0.6577091, 0.7229098, 0.8, 0.93333334, 1.0666667, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.17332701, 2.3378072, -1.2480373), Vector3(0.1590808, 1.8857328, -1.0689534), Vector3(0.1590808, 1.8857328, -1.0689534), Vector3(0.009859429, 0.5809944, -0.9109694), Vector3(-0.33590022, -0.23079826, 0.08424218), Vector3(-1.2997308, 1.6404102, 3.1238046), Vector3(-1.2997308, 1.6404102, 3.1238046), Vector3(-0.21469738, 0.68733066, -2.4009101), Vector3(0.55742073, 2.1969135, -2.304199), Vector3(0.4652053, 3.051277, -1.3217098), Vector3(0.22897448, 1.5018413, -0.6505467), Vector3(0.12887982, 0.84532154, -0.3661646), Vector3(0, 0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Visual/Body/Hands/Hand2/HandKatana:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Visual/Body/Sheat/SheetKatana:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.008996163, 0.23205365, 0.003682671), Vector3(0, 0.1052244, -0.0030614138)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Visual/Body/Sheat/SheetKatana:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Components/AnimationCombatBridge")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.26666668, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"open_hitbox"
+}, {
+"args": [],
+"method": &"close_hitbox"
+}]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Combat/HitBox/CollisionShape3D:shape:size")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0.26675773, 0.30870077, 0.3120562, 0.3959423),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.91137695, 0.52996826, 0.902594), Vector3(0.859375, 0.6588974, 1.2350479), Vector3(2.0116081, 1.5301678, 1.323868), Vector3(0.813324, 0.8093214, 0.97795886)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Combat/HitBox/CollisionShape3D:position")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.26675773, 0.30870077, 0.3120562, 0.3959423),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.3951187, -0.28915405, -0.35456252), Vector3(0.07228851, 0.10803604, -0.43137455), Vector3(0.0027249753, 0.031621695, -0.45659685), Vector3(0.47693634, 1.0326037, 0.19604754)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qchnr"]
 _data = {
 &"RESET": SubResource("Animation_nahmr"),
-&"light_attack_proto": SubResource("Animation_7uu5j")
+&"light_attack_01": SubResource("Animation_7uu5j"),
+&"light_attack_02": SubResource("Animation_qchnr"),
+&"light_attack_03": SubResource("Animation_3uay0")
 }
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f6a36"]
@@ -749,12 +1078,12 @@ align_transform_with_view = Callable()
 align_position_with_view = Callable()
 align_rotation_with_view = Callable()
 
-[node name="PlayerController" type="Node" parent="." unique_id=1711927072 node_paths=PackedStringArray("controlled_character", "locomotion_state_machine", "targeting_component", "ability_system")]
+[node name="PlayerController" type="Node" parent="." unique_id=1711927072 node_paths=PackedStringArray("controlled_character", "locomotion_state_machine", "targeting_component", "combo_component")]
 script = ExtResource("8_0jsky")
 controlled_character = NodePath("../Player/Ryu")
 locomotion_state_machine = NodePath("../Player/Ryu/Components/LocomotionHFSM")
 targeting_component = NodePath("../Player/Ryu/Components/TargetingComponent")
-ability_system = NodePath("../Player/Ryu/Components/AbilitySystemComponent")
+combo_component = NodePath("../Player/Ryu/Components/ComboComponent")
 
 [node name="Player" type="Node3D" parent="." unique_id=749219598]
 
@@ -869,7 +1198,8 @@ mesh = SubResource("CylinderMesh_t5jfb")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3010323, 0)
 mesh = SubResource("CylinderMesh_5pd38")
 
-[node name="CombatAnimationPlayer" type="AnimationPlayer" parent="Player/Ryu" unique_id=1227935905]
+[node name="CombatAnimationPlayer" type="AnimationPlayer" parent="Player/Ryu/Visual" unique_id=1227935905]
+root_node = NodePath("../..")
 libraries/ = SubResource("AnimationLibrary_qchnr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Ryu" unique_id=751194653]
@@ -898,7 +1228,7 @@ shape = SubResource("BoxShape3D_5pd38")
 [node name="AbilitySystemComponent" type="Node" parent="Player/Ryu/Components" unique_id=298236173]
 script = ExtResource("9_jcwrd")
 initial_attribute_sets = Array[ExtResource("10_ovd1s")]([ExtResource("11_p4i1k")])
-initial_abilities = Array[ExtResource("13_0wfrg")]([ExtResource("14_576yk")])
+initial_abilities = Array[ExtResource("13_0wfrg")]([ExtResource("14_576yk"), ExtResource("15_3uay0")])
 metadata/_custom_type_script = "uid://bvff6yf1rcj4r"
 
 [node name="MovementComponent" type="Node" parent="Player/Ryu/Components" unique_id=428082150 node_paths=PackedStringArray("body")]
@@ -952,10 +1282,16 @@ ability_system = NodePath("../AbilitySystemComponent")
 [node name="AnimationCombatBridge" type="Node" parent="Player/Ryu/Components" unique_id=1226470637 node_paths=PackedStringArray("ability_system", "animation_player", "hitboxes")]
 script = ExtResource("23_576yk")
 ability_system = NodePath("../AbilitySystemComponent")
-animation_player = NodePath("../../CombatAnimationPlayer")
+animation_player = NodePath("../../Visual/CombatAnimationPlayer")
 animation_finished_event_tag = SubResource("Resource_f6a36")
 hitboxes = [NodePath("../../Combat/HitBox")]
 bindings = Array[ExtResource("25_7uu5j")]([ExtResource("26_qchnr")])
+
+[node name="ComboComponent" type="Node" parent="Player/Ryu/Components" unique_id=1551603611 node_paths=PackedStringArray("ability_system", "animation_combat_bridge")]
+script = ExtResource("27_qchnr")
+ability_system = NodePath("../AbilitySystemComponent")
+animation_combat_bridge = NodePath("../AnimationCombatBridge")
+combo_definition = ExtResource("28_3uay0")
 
 [node name="CombatTest" type="Node3D" parent="." unique_id=1595079260]
 

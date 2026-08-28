@@ -1,16 +1,13 @@
-[gd_resource type="Resource" script_class="GameplayAbility" load_steps=9 format=3]
+[gd_resource type="Resource" script_class="GameplayAbility" format=3 uid="uid://dv82lx80vbicg"]
 
-[ext_resource type="Script" path="res://addons/wor_gameplay_framework/runtime/abilities/gameplay_ability.gd" id="1_ability"]
-[ext_resource type="Script" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag.gd" id="2_tag"]
-[ext_resource type="Script" path="res://addons/wor_gameplay_framework/runtime/abilities/tasks/wait_gameplay_event_ability_task_definition.gd" id="3_wait"]
+[ext_resource type="Script" uid="uid://cnumykssfwrgj" path="res://addons/wor_gameplay_framework/runtime/abilities/gameplay_ability.gd" id="1_ability"]
+[ext_resource type="Script" uid="uid://csie0hg80rn6i" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag.gd" id="2_tag"]
+[ext_resource type="Script" uid="uid://y4ur41ox7knr" path="res://addons/wor_gameplay_framework/runtime/abilities/tasks/ability_task_definition.gd" id="3_5o8s5"]
+[ext_resource type="Script" uid="uid://b6ucuv87otboi" path="res://addons/wor_gameplay_framework/runtime/abilities/tasks/wait_gameplay_event_ability_task_definition.gd" id="3_wait"]
 
 [sub_resource type="Resource" id="Tag_ability"]
 script = ExtResource("2_tag")
 tag_name = &"Ability.Attack.Light.01"
-
-[sub_resource type="Resource" id="Tag_grounded"]
-script = ExtResource("2_tag")
-tag_name = &"State.Grounded"
 
 [sub_resource type="Resource" id="Tag_attacking_blocked"]
 script = ExtResource("2_tag")
@@ -19,6 +16,10 @@ tag_name = &"State.Attacking"
 [sub_resource type="Resource" id="Tag_attacking_owned"]
 script = ExtResource("2_tag")
 tag_name = &"State.Attacking"
+
+[sub_resource type="Resource" id="Tag_grounded"]
+script = ExtResource("2_tag")
+tag_name = &"State.Grounded"
 
 [sub_resource type="Resource" id="Tag_animation_finished"]
 script = ExtResource("2_tag")
@@ -32,19 +33,7 @@ exact_match = true
 [resource]
 script = ExtResource("1_ability")
 ability_tag = SubResource("Tag_ability")
-activation_required_tags = Array[ExtResource("2_tag")]([
-	SubResource("Tag_grounded")
-])
-activation_blocked_tags = Array[ExtResource("2_tag")]([
-	SubResource("Tag_attacking_blocked")
-])
-activation_owned_tags = Array[ExtResource("2_tag")]([
-	SubResource("Tag_attacking_owned")
-])
-cancel_abilities_with_tags = Array[ExtResource("2_tag")]([])
-can_be_cancelled = true
-cooldown_commit_policy = 1
-apply_cooldown_on_cancel = true
-tasks = Array[ExtResource("3_wait")]([
-	SubResource("Task_wait_animation")
-])
+activation_required_tags = Array[ExtResource("2_tag")]([SubResource("Tag_grounded")])
+activation_blocked_tags = Array[ExtResource("2_tag")]([SubResource("Tag_attacking_blocked")])
+activation_owned_tags = Array[ExtResource("2_tag")]([SubResource("Tag_attacking_owned")])
+tasks = Array[ExtResource("3_5o8s5")]([SubResource("Task_wait_animation")])
