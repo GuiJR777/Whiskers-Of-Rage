@@ -1,10 +1,12 @@
 [gd_resource type="Resource" script_class="MeleeAttackDefinition" format=3 uid="uid://87w37y12745w"]
 
 [ext_resource type="Script" uid="uid://csie0hg80rn6i" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag.gd" id="1_80rki"]
+[ext_resource type="Script" uid="uid://dnsi5675fvxgf" path="res://game/combat/attacks/attack_motion_definition.gd" id="1_iqh24"]
 [ext_resource type="Script" uid="uid://ctucb2hkrubla" path="res://game/combat/attacks/melee_attack_definition.gd" id="1_jwnf2"]
 [ext_resource type="Script" uid="uid://cq6av1hppr15k" path="res://addons/wor_gameplay_framework/runtime/effects/gameplay_modifier.gd" id="2_hix2f"]
 [ext_resource type="Script" uid="uid://ht4hgbvmd1jw" path="res://addons/wor_gameplay_framework/runtime/attributes/gameplay_attribute.gd" id="3_iqh24"]
 [ext_resource type="Script" uid="uid://mk4xy2umrvlg" path="res://addons/wor_gameplay_framework/runtime/effects/gameplay_effect.gd" id="4_us1i4"]
+[ext_resource type="Script" uid="uid://c8omtfjgl8wq5" path="res://game/combat/reactions/hit_reaction_definition.gd" id="6_us1i4"]
 
 [sub_resource type="Resource" id="Resource_7exj2"]
 script = ExtResource("3_iqh24")
@@ -34,8 +36,15 @@ effect_id = &"Effect.Attack.Light.Hit"
 modifiers = Array[ExtResource("2_hix2f")]([SubResource("Resource_0sk1g"), SubResource("Resource_80rki")])
 metadata/_custom_type_script = "uid://mk4xy2umrvlg"
 
+[sub_resource type="Resource" id="Resource_1bxsr"]
+script = ExtResource("6_us1i4")
+horizontal_speed = 3.0
+horizontal_deceleration = 15.0
+metadata/_custom_type_script = "uid://c8omtfjgl8wq5"
+
 [resource]
 script = ExtResource("1_jwnf2")
 attack_id = &"LightAttack"
 hit_effect = SubResource("Resource_xd7te")
+hit_reaction = SubResource("Resource_1bxsr")
 metadata/_custom_type_script = "uid://ctucb2hkrubla"
