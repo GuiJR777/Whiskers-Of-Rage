@@ -22,6 +22,7 @@
 [ext_resource type="Resource" uid="uid://dv82lx80vbicg" path="res://game/characters/player/ryu/resources/light_attack_ability.tres" id="14_576yk"]
 [ext_resource type="Script" uid="uid://dg88akxm50nt0" path="res://game/movement/hfsm/airborne_locomotion_state.gd" id="14_ovd1s"]
 [ext_resource type="Resource" uid="uid://dky1x2mdn25qb" path="res://game/characters/player/ryu/resources/light_attack_02_ability.tres" id="15_3uay0"]
+[ext_resource type="Resource" uid="uid://1u01sd0j1py" path="res://game/characters/player/ryu/resources/light_attack_03_ability.tres" id="16_yddqy"]
 [ext_resource type="Script" uid="uid://h7gkevj1y7m" path="res://game/movement/bridges/locomotion_gameplay_bridge.gd" id="19_8wnq3"]
 [ext_resource type="Resource" uid="uid://x2hp8wcmjug" path="res://development/test_actors/target_dummy/resources/target_dummy_attributes.tres" id="19_m1xnf"]
 [ext_resource type="Script" uid="uid://cgkrcrdyrg5gc" path="res://game/combat/hurtboxes/hurtbox_component.gd" id="21_37b0s"]
@@ -32,6 +33,7 @@
 [ext_resource type="Script" uid="uid://vad4ip6d8h6k" path="res://game/combat/combos/combo_component.gd" id="27_qchnr"]
 [ext_resource type="Resource" uid="uid://so6kfybfevgc" path="res://game/characters/player/ryu/resources/light_combo.tres" id="28_3uay0"]
 [ext_resource type="Resource" uid="uid://btuauwxu767cu" path="res://game/characters/player/ryu/resources/light_attack_02_animation_binding.tres" id="28_a8vxj"]
+[ext_resource type="Resource" uid="uid://m5sv3vxro00h" path="res://game/characters/player/ryu/resources/light_attack_03_animation_binding.tres" id="29_yddqy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0ojxy"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -757,14 +759,20 @@ tracks/9/path = NodePath("Components/AnimationCombatBridge")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0.033333335, 0.2),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0.033333335, 0.2, 0.23333333, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "values": [{
 "args": [],
 "method": &"open_hitbox"
 }, {
 "args": [],
 "method": &"close_hitbox"
+}, {
+"args": [],
+"method": &"open_combo_window"
+}, {
+"args": [],
+"method": &"close_combo_window"
 }]
 }
 tracks/10/type = "value"
@@ -1229,7 +1237,7 @@ shape = SubResource("BoxShape3D_5pd38")
 [node name="AbilitySystemComponent" type="Node" parent="Player/Ryu/Components" unique_id=298236173]
 script = ExtResource("9_jcwrd")
 initial_attribute_sets = Array[ExtResource("10_ovd1s")]([ExtResource("11_p4i1k")])
-initial_abilities = Array[ExtResource("13_0wfrg")]([ExtResource("14_576yk"), ExtResource("15_3uay0")])
+initial_abilities = Array[ExtResource("13_0wfrg")]([ExtResource("14_576yk"), ExtResource("15_3uay0"), ExtResource("16_yddqy")])
 metadata/_custom_type_script = "uid://bvff6yf1rcj4r"
 
 [node name="MovementComponent" type="Node" parent="Player/Ryu/Components" unique_id=428082150 node_paths=PackedStringArray("body")]
@@ -1286,7 +1294,7 @@ ability_system = NodePath("../AbilitySystemComponent")
 animation_player = NodePath("../../Visual/CombatAnimationPlayer")
 animation_finished_event_tag = SubResource("Resource_f6a36")
 hitboxes = [NodePath("../../Combat/HitBox")]
-bindings = Array[ExtResource("25_7uu5j")]([ExtResource("26_qchnr"), ExtResource("28_a8vxj")])
+bindings = Array[ExtResource("25_7uu5j")]([ExtResource("26_qchnr"), ExtResource("28_a8vxj"), ExtResource("29_yddqy")])
 
 [node name="ComboComponent" type="Node" parent="Player/Ryu/Components" unique_id=1551603611 node_paths=PackedStringArray("ability_system", "animation_combat_bridge")]
 script = ExtResource("27_qchnr")

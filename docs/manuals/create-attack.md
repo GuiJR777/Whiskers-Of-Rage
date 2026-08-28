@@ -3,6 +3,58 @@
 ## Modelo
 Ataque é uma `GameplayAbility` configurada com dados, tasks e effects.
 
+
+## Passos revisados
+Claro. Para adicionar mais um ataque ao combo atual:
+
+* Criar `Ability.Attack.Light.03` no catálogo de tags e no `WORGameplayTags`.
+* Criar `light_attack_03.tres` com dano/poise próprios.
+* Criar `light_attack_03_ability.tres`:
+
+  * tag `Ability.Attack.Light.03`
+  * `Required`: `State.Grounded`, `State.Attacking`
+  * `Blocked`: vazio
+  * `Owned`: `State.Attacking`
+  * `Cancel Abilities With Tags`: `Ability.Attack.Light.02`
+  * task `WaitGameplayEvent(Event.Animation.AbilityFinished)`
+* Adicionar essa Ability no `Initial Abilities` do ASC do Ryu.
+* Criar a animação `light_attack_03`.
+* Criar `light_attack_03_animation_binding.tres` apontando para:
+
+  * `Ability.Attack.Light.03`
+  * animação `light_attack_03`
+  * hitbox `Katana`
+  * `light_attack_03.tres`
+* Adicionar esse binding no array `Bindings` do `AnimationCombatBridge`.
+* No `light_combo.tres`, adicionar um terceiro `ComboStep` com `Ability.Attack.Light.03`.
+* Na animação do `light_attack_02`, adicionar:
+
+  * `open_combo_window()`
+  * `close_combo_window()`
+* No `light_attack_03`, configurar normalmente:
+
+  * `open_hitbox()`
+  * animação de posição/tamanho da hitbox
+  * `close_hitbox()`
+  * sem Combo Window se for o último golpe.
+
+Regra mental simples:
+
+```text
+Novo golpe =
+Tag
++ AttackDefinition
++ GameplayAbility
++ Animation
++ AnimationBinding
++ ASC Initial Ability
++ ComboStep
++ ComboWindow no golpe anterior
+```
+
+Para um `Attack04`, é exatamente o mesmo processo.
+
+
 ## Passos
 1. Criar `GameplayAbility` de ataque.
 2. Definir tag, ex. `Ability.Attack.Light.01`.
@@ -41,3 +93,4 @@ M4. Até lá, o sandbox usa uma espera determinística para representar o frame 
 - ligar hitbox permanentemente;
 - duplicar cooldown no input;
 - controlar regra de dano no AnimationPlayer.
+

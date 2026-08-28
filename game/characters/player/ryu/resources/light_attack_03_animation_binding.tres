@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CombatAnimationBinding" format=3 uid="uid://m5sv3vxro00h"]
+
+[ext_resource type="Script" uid="uid://csie0hg80rn6i" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag.gd" id="1_rl47a"]
+[ext_resource type="Resource" uid="uid://87me7itg7ny" path="res://game/characters/player/ryu/resources/light_attack_03.tres" id="2_rl47a"]
+[ext_resource type="Script" uid="uid://jbccc1jhdm17" path="res://game/combat/animation/combat_animation_binding.gd" id="3_jfsgh"]
+
+[sub_resource type="Resource" id="Resource_2ndui"]
+script = ExtResource("1_rl47a")
+tag_name = &"Ability.Attack.Light.03"
+
+[resource]
+script = ExtResource("3_jfsgh")
+ability_tag = SubResource("Resource_2ndui")
+animation_name = &"light_attack_03"
+hitbox_id = &"Katana"
+attack_definition = ExtResource("2_rl47a")
+metadata/_custom_type_script = "uid://jbccc1jhdm17"

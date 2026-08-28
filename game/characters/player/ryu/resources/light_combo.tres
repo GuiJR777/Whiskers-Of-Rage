@@ -20,11 +20,20 @@ tag_name = &"Ability.Attack.Light.02"
 [sub_resource type="Resource" id="Resource_4woui"]
 script = ExtResource("2_rgy6e")
 ability_tag = SubResource("Resource_emxhy")
+metadata/_custom_type_script = "uid://dbthlbinmlskp"
+
+[sub_resource type="Resource" id="Resource_2ndui"]
+script = ExtResource("3_rgy6e")
+tag_name = &"Ability.Attack.Light.03"
+
+[sub_resource type="Resource" id="Resource_cko6j"]
+script = ExtResource("2_rgy6e")
+ability_tag = SubResource("Resource_2ndui")
 requires_hit_confirm_to_advance = false
 metadata/_custom_type_script = "uid://dbthlbinmlskp"
 
 [resource]
 script = ExtResource("1_2ayyu")
 combo_id = &"LightCombo"
-steps = Array[ExtResource("2_rgy6e")]([SubResource("Resource_xitri"), SubResource("Resource_4woui")])
+steps = Array[ExtResource("2_rgy6e")]([SubResource("Resource_xitri"), SubResource("Resource_4woui"), SubResource("Resource_cko6j")])
 metadata/_custom_type_script = "uid://d0jveyq2e4vw5"

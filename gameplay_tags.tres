@@ -55,6 +55,10 @@ tag_name = &"Event.Combat.ComboWindow.Open"
 script = ExtResource("2_manq0")
 tag_name = &"Event.Combat.ComboWindow.Close"
 
+[sub_resource type="Resource" id="Resource_2ndui"]
+script = ExtResource("2_manq0")
+tag_name = &"Ability.Attack.Light.03"
+
 [resource]
 script = ExtResource("1_catalog")
-tags = Array[ExtResource("2_manq0")]([SubResource("Resource_u2tea"), SubResource("Resource_manq0"), SubResource("Resource_re21l"), SubResource("Resource_o0w6w"), SubResource("Resource_rdaxo"), SubResource("Resource_5c1ds"), SubResource("Resource_o1r8d"), SubResource("Resource_dbn6f"), SubResource("Resource_dyglh"), SubResource("Resource_emxhy"), SubResource("Resource_bd2bf"), SubResource("Resource_yw1uf"), SubResource("Resource_khueq")])
+tags = Array[ExtResource("2_manq0")]([SubResource("Resource_u2tea"), SubResource("Resource_manq0"), SubResource("Resource_re21l"), SubResource("Resource_o0w6w"), SubResource("Resource_rdaxo"), SubResource("Resource_5c1ds"), SubResource("Resource_o1r8d"), SubResource("Resource_dbn6f"), SubResource("Resource_dyglh"), SubResource("Resource_emxhy"), SubResource("Resource_bd2bf"), SubResource("Resource_yw1uf"), SubResource("Resource_khueq"), SubResource("Resource_2ndui")])

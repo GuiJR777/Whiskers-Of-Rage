@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="GameplayAbility" format=3 uid="uid://1u01sd0j1py"]
+
+[ext_resource type="Script" uid="uid://csie0hg80rn6i" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag.gd" id="1_pgatk"]
+[ext_resource type="Script" uid="uid://cnumykssfwrgj" path="res://addons/wor_gameplay_framework/runtime/abilities/gameplay_ability.gd" id="2_xhg4n"]
+[ext_resource type="Script" uid="uid://y4ur41ox7knr" path="res://addons/wor_gameplay_framework/runtime/abilities/tasks/ability_task_definition.gd" id="3_811al"]
+[ext_resource type="Script" uid="uid://b6ucuv87otboi" path="res://addons/wor_gameplay_framework/runtime/abilities/tasks/wait_gameplay_event_ability_task_definition.gd" id="4_06jqm"]
+
+[sub_resource type="Resource" id="Resource_2ndui"]
+script = ExtResource("1_pgatk")
+tag_name = &"Ability.Attack.Light.03"
+
+[sub_resource type="Resource" id="Tag_attacking_owned"]
+script = ExtResource("1_pgatk")
+tag_name = &"State.Attacking"
+
+[sub_resource type="Resource" id="Tag_grounded"]
+script = ExtResource("1_pgatk")
+tag_name = &"State.Grounded"
+
+[sub_resource type="Resource" id="Resource_o1r8d"]
+script = ExtResource("1_pgatk")
+tag_name = &"State.Attacking"
+
+[sub_resource type="Resource" id="Resource_emxhy"]
+script = ExtResource("1_pgatk")
+tag_name = &"Ability.Attack.Light.02"
+
+[sub_resource type="Resource" id="Tag_animation_finished"]
+script = ExtResource("1_pgatk")
+tag_name = &"Event.Animation.AbilityFinished"
+
+[sub_resource type="Resource" id="Task_wait_animation"]
+script = ExtResource("4_06jqm")
+event_tag = SubResource("Tag_animation_finished")
+exact_match = true
+
+[resource]
+script = ExtResource("2_xhg4n")
+ability_tag = SubResource("Resource_2ndui")
+activation_required_tags = Array[ExtResource("1_pgatk")]([SubResource("Tag_grounded"), SubResource("Resource_o1r8d")])
+activation_owned_tags = Array[ExtResource("1_pgatk")]([SubResource("Tag_attacking_owned")])
+cancel_abilities_with_tags = Array[ExtResource("1_pgatk")]([SubResource("Resource_emxhy")])
+tasks = Array[ExtResource("3_811al")]([SubResource("Task_wait_animation")])

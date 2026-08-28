@@ -34,6 +34,10 @@ const ABILITY_ATTACK_LIGHT_02: StringName = (
 	&"Ability.Attack.Light.02"
 )
 
+const ABILITY_ATTACK_LIGHT_03: StringName = (
+	&"Ability.Attack.Light.03"
+)
+
 
 # ============================================================================
 # Gameplay Events - Animation
