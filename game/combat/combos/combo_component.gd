@@ -38,6 +38,13 @@ var _hit_confirmed: bool = false
 var _transition_in_progress: bool = false
 
 
+# Input do próximo step que já foi aceito,
+# mas ainda está aguardando as condições do combo.
+var _next_step_queued: bool = false
+
+var _queued_instigator: Node
+
+
 func _ready() -> void:
 	if ability_system == null:
 		push_error(
@@ -68,7 +75,6 @@ func _ready() -> void:
 				validation_errors
 			)
 		)
-
 		return
 
 	ability_system.gameplay_event_received.connect(
@@ -83,6 +89,10 @@ func _ready() -> void:
 		_on_ability_ended
 	)
 
+
+# ============================================================================
+# Public API
+# ============================================================================
 
 func get_input_buffer_time() -> float:
 	if combo_definition == null:
@@ -101,6 +111,8 @@ func try_request_input(
 	if action != combo_definition.input_action:
 		return false
 
+	# Nenhum combo ativo:
+	# começa pelo primeiro step.
 	if _current_step_index < 0:
 		return _activate_step(
 			0,
@@ -108,36 +120,23 @@ func try_request_input(
 			false
 		)
 
-	if not _combo_window_open:
+	# Combo já está no último step.
+	if not _has_next_step():
 		return false
 
-	var current_step := (
-		combo_definition
-		.steps[_current_step_index]
-	)
+	# Existe próximo ataque.
+	#
+	# Não precisamos esperar a Combo Window abrir
+	# para aceitar o input.
+	#
+	# Guardamos a intenção e executamos assim que
+	# HitConfirm + ComboWindow permitirem.
+	_next_step_queued = true
+	_queued_instigator = instigator
 
-	if (
-		current_step
-		.requires_hit_confirm_to_advance
-		and not _hit_confirmed
-	):
-		return false
+	_try_execute_queued_transition()
 
-	var next_step_index := (
-		_current_step_index + 1
-	)
-
-	if (
-		next_step_index
-		>= combo_definition.steps.size()
-	):
-		return false
-
-	return _activate_step(
-		next_step_index,
-		instigator,
-		true
-	)
+	return true
 
 
 func is_combo_active() -> bool:
@@ -154,6 +153,10 @@ func is_combo_window_open() -> bool:
 
 func has_hit_confirm() -> bool:
 	return _hit_confirmed
+
+
+func has_queued_next_step() -> bool:
+	return _next_step_queued
 
 
 # ============================================================================
@@ -233,6 +236,66 @@ func _activate_step(
 	return true
 
 
+func _try_execute_queued_transition() -> void:
+	if not _next_step_queued:
+		return
+
+	if _current_step_index < 0:
+		return
+
+	if not _combo_window_open:
+		return
+
+	var current_step := (
+		combo_definition
+		.steps[_current_step_index]
+	)
+
+	if (
+		current_step
+		.requires_hit_confirm_to_advance
+		and not _hit_confirmed
+	):
+		return
+
+	var next_step_index := (
+		_current_step_index + 1
+	)
+
+	if (
+		next_step_index
+		>= combo_definition.steps.size()
+	):
+		_clear_queued_input()
+		return
+
+	var instigator := _queued_instigator
+
+	_clear_queued_input()
+
+	var accepted := _activate_step(
+		next_step_index,
+		instigator,
+		true
+	)
+
+	if not accepted:
+		push_warning(
+			"ComboComponent failed to activate combo step %d."
+			% next_step_index
+		)
+
+
+func _has_next_step() -> bool:
+	if _current_step_index < 0:
+		return false
+
+	return (
+		_current_step_index + 1
+		< combo_definition.steps.size()
+	)
+
+
 # ============================================================================
 # Gameplay Events
 # ============================================================================
@@ -262,11 +325,26 @@ func _on_gameplay_event_received(
 		WORGameplayTags.EVENT_COMBAT_HIT_CONFIRMED:
 			_hit_confirmed = true
 
+			# Caso a Combo Window já esteja aberta.
+			call_deferred(
+				"_try_execute_queued_transition"
+			)
+
 		WORGameplayTags.EVENT_COMBAT_COMBO_WINDOW_OPEN:
 			_combo_window_open = true
 
+			# Caso o jogador tenha apertado Attack
+			# antes da janela abrir.
+			call_deferred(
+				"_try_execute_queued_transition"
+			)
+
 		WORGameplayTags.EVENT_COMBAT_COMBO_WINDOW_CLOSE:
 			_combo_window_open = false
+
+			# Não deixa input de uma janela antiga
+			# escapar para outro momento do combo.
+			_clear_queued_input()
 
 		WORGameplayTags.EVENT_ANIMATION_ABILITY_FINISHED:
 			_reset_combo()
@@ -289,8 +367,24 @@ func _event_matches_current_step(
 		.tag_name
 	)
 
+	# Preferimos o AbilityContext.
+	# É mais robusto que depender do payload.
+	if (
+		event.context != null
+		and event.context.ability != null
+		and event.context.ability.ability_tag != null
+	):
+		return (
+			event.context
+			.ability
+			.ability_tag
+			.tag_name
+			== expected_tag
+		)
+
+	# Fallback para eventos antigos / externos.
 	var payload_ability := StringName(
-		String(
+		str(
 			event.payload.get(
 				"ability",
 				""
@@ -315,7 +409,7 @@ func _on_ability_cancelled(
 		return
 
 	# Attack01 sendo cancelado para Attack02
-	# NÃO encerra o combo.
+	# faz parte da transição normal do combo.
 	if _transition_in_progress:
 		return
 
@@ -351,6 +445,12 @@ func _matches_current_ability(
 		.steps[_current_step_index]
 	)
 
+	if current_step == null:
+		return false
+
+	if current_step.ability_tag == null:
+		return false
+
 	return (
 		current_step.ability_tag.tag_name
 		== ability.ability_tag.tag_name
@@ -361,6 +461,11 @@ func _matches_current_ability(
 # Reset
 # ============================================================================
 
+func _clear_queued_input() -> void:
+	_next_step_queued = false
+	_queued_instigator = null
+
+
 func _reset_combo() -> void:
 	if _current_step_index < 0:
 		return
@@ -369,5 +474,7 @@ func _reset_combo() -> void:
 
 	_combo_window_open = false
 	_hit_confirmed = false
+
+	_clear_queued_input()
 
 	combo_ended.emit()
