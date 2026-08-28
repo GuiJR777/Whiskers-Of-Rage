@@ -11,8 +11,10 @@
 [ext_resource type="Script" uid="uid://b8hhnqsugykly" path="res://addons/phantom_camera/scripts/resources/camera_3d_resource.gd" id="7_yu54f"]
 [ext_resource type="Script" uid="uid://bsv5wq3nfd2ld" path="res://game/characters/player/player_controller.gd" id="8_0jsky"]
 [ext_resource type="Script" uid="uid://bvff6yf1rcj4r" path="res://addons/wor_gameplay_framework/runtime/ability_system_component.gd" id="9_jcwrd"]
+[ext_resource type="Material" uid="uid://qvg55tvg7cjm" path="res://addons/UltimateToon/assets/BinbunMaterials/presets/basic/basic_hard.tres" id="9_se260"]
 [ext_resource type="Script" uid="uid://cpae75yhqr32d" path="res://game/combat/hitboxes/hitbox_component.gd" id="9_wo676"]
 [ext_resource type="Script" uid="uid://bste3e18adw41" path="res://game/combat/targeting/targeting_component.gd" id="9_yu54f"]
+[ext_resource type="Shader" uid="uid://bp3r6ki2tkj75" path="res://assets/shaders/outline_shader.gdshader" id="10_oc4u6"]
 [ext_resource type="Script" uid="uid://cbusf2dhwtxld" path="res://addons/wor_gameplay_framework/runtime/attributes/gameplay_attribute_set.gd" id="10_ovd1s"]
 [ext_resource type="Resource" uid="uid://dpwg5mnv0a737" path="res://game/characters/player/ryu/resources/ryu_attributes.tres" id="11_p4i1k"]
 [ext_resource type="Script" uid="uid://dl7t82wblj7w1" path="res://game/movement/hfsm/character_locomotion_state_machine.gd" id="11_vyjw0"]
@@ -68,19 +70,170 @@ script = ExtResource("3_mlc7w")
 script = ExtResource("7_yu54f")
 metadata/_custom_type_script = "uid://b8hhnqsugykly"
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t5jfb"]
-albedo_color = Color(0.019607844, 0.09019608, 0.16470589, 1)
-
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_f6a36"]
-material = SubResource("StandardMaterial3D_t5jfb")
+material = ExtResource("9_se260")
 radius = 0.3
 height = 1.4
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5pd38"]
-albedo_color = Color(0.99215686, 0.80784315, 0.25882354, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oc4u6"]
+render_priority = 0
+shader = ExtResource("10_oc4u6")
+shader_parameter/outline_color = Color(0.02, 0.02, 0.02, 1)
+shader_parameter/outline_size = 0.015
+
+[sub_resource type="Shader" id="Shader_rmr2g"]
+code = "shader_type spatial;
+
+group_uniforms Shader.Albedo;
+uniform vec4 albedo_color : source_color  = vec4(1.0);
+uniform sampler2D albedo_texture;
+uniform float albedo_affect : hint_range(0.0, 1.0, 0.05) = 0.0;
+
+group_uniforms Shader.Light;
+uniform bool use_stepped = true;
+uniform float steps = 3.0;
+uniform float step_smoothness : hint_range(0.0, 1.0, 0.05) = 0.3;
+uniform vec4 shadow_tint : source_color;
+uniform float shadow_tint_amount : hint_range(0.0, 1.0, 0.1) = 0.4;
+
+group_uniforms Shader.Specular;
+uniform float specular : hint_range(0.0, 1.0, 0.05) = 0.0;
+
+group_uniforms Shader.Normal;
+uniform float normal_strength : hint_range(0.0, 1.0, 0.05) = 0.0;
+uniform sampler2D normal_texture;
+
+group_uniforms Shader.Rim;
+uniform bool use_rim = true;
+uniform vec4 rim_color : source_color = vec4(1.0);
+uniform float rim_amount = 2.0;
+uniform float rim_smoothness = 0.2;
+uniform float rim_mask_shadow : hint_range(0.0, 1.0, 0.05) = 1.0;
+uniform float rim_blend : hint_range(0.0, 1.0, 0.05) = 1.0;
+
+group_uniforms Shader.Pattern;
+uniform bool use_pattern = true;
+uniform sampler2D pattern_texture;
+uniform int pattern_uv_mode : hint_enum(\"UV\", \"Screen\", \"Local Screen\") = 2;
+uniform float pattern_tiling = 32.0;
+uniform float pattern_amount : hint_range(0.0, 1.0, 0.05) = 0.5;
+uniform float pattern_smoothness : hint_range(0.0, 1.0, 0.05) = 0.5;
+uniform float pattern_blend : hint_range(0.0, 1.0, 0.05) = 0.2;
+
+varying vec4 node_position;
+
+float fresnel(float amount, vec3 normal, vec3 view)
+{
+	return pow((1.0 - clamp(dot(normalize(normal), normalize(view)), 0.0, 1.0 )), amount);
+}
+
+vec2 pattern_uv(vec2 uv, vec2 screen_uv){
+	vec2 p_uv = uv;
+	if(pattern_uv_mode == 1) { p_uv = screen_uv; }
+	if(pattern_uv_mode == 2) { p_uv = (screen_uv * 2.0 - 1.0) * node_position.w - node_position.xy; }
+	return p_uv;
+}
+
+float shape_value(float value, vec2 uv, vec2 screen_size){
+	float aspect = screen_size.y / screen_size.x;
+	vec2 pattern_uv = uv * pattern_tiling * vec2(1.0, aspect);
+	float shadow_pattern = texture(pattern_texture, pattern_uv).r;
+	shadow_pattern = clamp(smoothstep(shadow_pattern - pattern_smoothness, shadow_pattern + pattern_smoothness, value + pattern_amount), 0.0, value + pattern_amount);
+	return shadow_pattern;
+}
+
+void vertex() {
+	 node_position = (PROJECTION_MATRIX * vec4(NODE_POSITION_VIEW, 1.0));
+}
+
+void fragment() {
+	vec4 albedo = texture(albedo_texture, UV) * albedo_color;
+	vec4 normal_map = texture(normal_texture, UV);
+
+	ALBEDO = albedo.rgb;
+
+	NORMAL_MAP = mix(vec3(0.5,0.5,1.0), normal_map.rgb, normal_strength);
+
+	SPECULAR = specular;
+}
+
+void light () {
+	float ndotl = clamp(dot(NORMAL,LIGHT),0.0,1.0) * ATTENUATION;
+
+	float light = ndotl;
+
+	if(use_stepped){
+		float light_mult = light * steps;
+		float step_base = floor(light_mult);
+		float light_factor = light_mult - step_base;
+
+		light_factor = smoothstep(0.5 - step_smoothness, 0.5 + step_smoothness, light_factor);
+		light = (step_base + light_factor) / steps;
+	}
+
+	if(use_pattern){
+		vec2 p_uv = pattern_uv(UV, SCREEN_UV);
+
+		light = mix(light, shape_value(light, p_uv, VIEWPORT_SIZE), pattern_blend);
+	}
+
+	vec3 diffuse = vec3(pow(light, 1.0)) * (LIGHT_COLOR / PI);
+	diffuse = (shadow_tint.rgb * (1.0 - (light)) * shadow_tint_amount) + diffuse * light;
+
+	if(use_rim){
+		float rim_value = fresnel(rim_amount, NORMAL, VIEW);
+		rim_value = smoothstep(0.5 - (rim_smoothness / 2.0), 0.5 + (rim_smoothness / 2.0), rim_value);
+		rim_value = mix(rim_value, rim_value * light, rim_mask_shadow);
+
+		diffuse += rim_color.rgb * rim_value * rim_blend;
+	}
+
+	DIFFUSE_LIGHT += mix(diffuse, ALBEDO * diffuse, albedo_affect);
+	SPECULAR_LIGHT += vec3(pow(light, 50.0)) * specular;
+}"
+
+[sub_resource type="Gradient" id="Gradient_383lj"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_rmr2g"]
+gradient = SubResource("Gradient_383lj")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1bxsr"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_oc4u6")
+shader = SubResource("Shader_rmr2g")
+shader_parameter/albedo_color = Color(0.99215686, 0.80784315, 0.25882354, 1)
+shader_parameter/albedo_affect = 0.0
+shader_parameter/use_stepped = true
+shader_parameter/steps = 3.0
+shader_parameter/step_smoothness = 0.0
+shader_parameter/shadow_tint = Color(0.9238555, 0.9083748, 0, 1)
+shader_parameter/shadow_tint_amount = 0.4
+shader_parameter/specular = 1.0
+shader_parameter/normal_strength = 0.0
+shader_parameter/use_rim = true
+shader_parameter/rim_color = Color(0.92536014, 0.94337535, 0.64349794, 1)
+shader_parameter/rim_amount = 1.5
+shader_parameter/rim_smoothness = 0.0
+shader_parameter/rim_mask_shadow = 1.0
+shader_parameter/rim_blend = 1.0
+shader_parameter/use_pattern = true
+shader_parameter/pattern_texture = SubResource("GradientTexture2D_rmr2g")
+shader_parameter/pattern_uv_mode = 2
+shader_parameter/pattern_tiling = 32.0
+shader_parameter/pattern_amount = 0.0
+shader_parameter/pattern_smoothness = 0.0
+shader_parameter/pattern_blend = 0.35
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_t5jfb"]
-material = SubResource("StandardMaterial3D_5pd38")
+material = SubResource("ShaderMaterial_1bxsr")
+radius = 0.03
+height = 0.15
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ren3s"]
+material = SubResource("ShaderMaterial_1bxsr")
 radius = 0.03
 height = 0.15
 
@@ -123,18 +276,63 @@ _data = {
 }
 
 [sub_resource type="PrismMesh" id="PrismMesh_f6a36"]
-material = SubResource("StandardMaterial3D_t5jfb")
+material = ExtResource("9_se260")
 size = Vector3(0.3, 0.2, 0.02)
 
 [sub_resource type="SphereMesh" id="SphereMesh_c2xmk"]
-material = SubResource("StandardMaterial3D_t5jfb")
+material = ExtResource("9_se260")
 radius = 0.06
 height = 0.2
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vby3f"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_383lj"]
+render_priority = 0
+shader = ExtResource("10_oc4u6")
+shader_parameter/outline_color = Color(0.02, 0.02, 0.02, 1)
+shader_parameter/outline_size = 0.015
+
+[sub_resource type="Gradient" id="Gradient_1bxsr"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ren3s"]
+gradient = SubResource("Gradient_1bxsr")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8hr01"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_383lj")
+shader = SubResource("Shader_rmr2g")
+shader_parameter/albedo_color = Color(1, 1, 1, 1)
+shader_parameter/albedo_affect = 0.0
+shader_parameter/use_stepped = true
+shader_parameter/steps = 3.0
+shader_parameter/step_smoothness = 0.0
+shader_parameter/shadow_tint = Color(0, 0, 0.654902, 1)
+shader_parameter/shadow_tint_amount = 0.4
+shader_parameter/specular = 0.0
+shader_parameter/normal_strength = 0.0
+shader_parameter/use_rim = true
+shader_parameter/rim_color = Color(0.580392, 1, 1, 1)
+shader_parameter/rim_amount = 1.5
+shader_parameter/rim_smoothness = 0.0
+shader_parameter/rim_mask_shadow = 1.0
+shader_parameter/rim_blend = 1.0
+shader_parameter/use_pattern = true
+shader_parameter/pattern_texture = SubResource("GradientTexture2D_ren3s")
+shader_parameter/pattern_uv_mode = 2
+shader_parameter/pattern_tiling = 32.0
+shader_parameter/pattern_amount = 0.0
+shader_parameter/pattern_smoothness = 0.0
+shader_parameter/pattern_blend = 0.35
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_p7od3"]
-material = SubResource("StandardMaterial3D_vby3f")
+material = SubResource("ShaderMaterial_8hr01")
+top_radius = 0.06
+bottom_radius = 0.06
+height = 0.15
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_i7arx"]
+material = SubResource("ShaderMaterial_8hr01")
 top_radius = 0.06
 bottom_radius = 0.06
 height = 0.15
@@ -167,36 +365,112 @@ bottom_radius = 0.025
 height = 0.2
 
 [sub_resource type="TextMesh" id="TextMesh_f6a36"]
-material = SubResource("StandardMaterial3D_t5jfb")
+material = ExtResource("9_se260")
 text = "S"
 font_size = 72
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iqjut"]
-albedo_color = Color(0.85882354, 0.003921569, 0.03137255, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i7arx"]
+render_priority = 0
+shader = ExtResource("10_oc4u6")
+shader_parameter/outline_color = Color(0.02, 0.02, 0.02, 1)
+shader_parameter/outline_size = 0.015
+
+[sub_resource type="Gradient" id="Gradient_uao57"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qcvml"]
+gradient = SubResource("Gradient_uao57")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c1vxw"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_i7arx")
+shader = SubResource("Shader_rmr2g")
+shader_parameter/albedo_color = Color(0.85882354, 0.003921569, 0.03137255, 1)
+shader_parameter/albedo_affect = 0.0
+shader_parameter/use_stepped = true
+shader_parameter/steps = 3.0
+shader_parameter/step_smoothness = 0.0
+shader_parameter/shadow_tint = Color(0, 0, 0.654902, 1)
+shader_parameter/shadow_tint_amount = 0.4
+shader_parameter/specular = 0.0
+shader_parameter/normal_strength = 0.0
+shader_parameter/use_rim = true
+shader_parameter/rim_color = Color(0.580392, 1, 1, 1)
+shader_parameter/rim_amount = 1.5
+shader_parameter/rim_smoothness = 0.0
+shader_parameter/rim_mask_shadow = 1.0
+shader_parameter/rim_blend = 1.0
+shader_parameter/use_pattern = true
+shader_parameter/pattern_texture = SubResource("GradientTexture2D_qcvml")
+shader_parameter/pattern_uv_mode = 2
+shader_parameter/pattern_tiling = 32.0
+shader_parameter/pattern_amount = 0.0
+shader_parameter/pattern_smoothness = 0.0
+shader_parameter/pattern_blend = 0.35
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_f6a36"]
-material = SubResource("StandardMaterial3D_iqjut")
+material = SubResource("ShaderMaterial_c1vxw")
 top_radius = 0.32
 bottom_radius = 0.31
 height = 0.25
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rw1dt"]
-albedo_color = Color(0.3019608, 0.3019608, 0.30980393, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gp8vx"]
+render_priority = 0
+shader = ExtResource("10_oc4u6")
+shader_parameter/outline_color = Color(0.02, 0.02, 0.02, 1)
+shader_parameter/outline_size = 0.015
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_mlc7w"]
-material = SubResource("StandardMaterial3D_rw1dt")
+[sub_resource type="Gradient" id="Gradient_fg0rt"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cjvq6"]
+gradient = SubResource("Gradient_fg0rt")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bf4o2"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_gp8vx")
+shader = SubResource("Shader_rmr2g")
+shader_parameter/albedo_color = Color(0.3019608, 0.3019608, 0.30980393, 1)
+shader_parameter/albedo_affect = 0.0
+shader_parameter/use_stepped = true
+shader_parameter/steps = 3.0
+shader_parameter/step_smoothness = 0.0
+shader_parameter/shadow_tint = Color(0, 0, 0.654902, 1)
+shader_parameter/shadow_tint_amount = 0.4
+shader_parameter/specular = 0.0
+shader_parameter/normal_strength = 0.0
+shader_parameter/use_rim = true
+shader_parameter/rim_color = Color(0.580392, 1, 1, 1)
+shader_parameter/rim_amount = 1.5
+shader_parameter/rim_smoothness = 0.0
+shader_parameter/rim_mask_shadow = 1.0
+shader_parameter/rim_blend = 1.0
+shader_parameter/use_pattern = true
+shader_parameter/pattern_texture = SubResource("GradientTexture2D_cjvq6")
+shader_parameter/pattern_uv_mode = 2
+shader_parameter/pattern_tiling = 32.0
+shader_parameter/pattern_amount = 0.0
+shader_parameter/pattern_smoothness = 0.0
+shader_parameter/pattern_blend = 0.35
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ej3m0"]
+material = SubResource("ShaderMaterial_bf4o2")
 top_radius = 0.32
 bottom_radius = 0.32
 height = 0.4
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k73tv"]
-albedo_color = Color(0.85882354, 0.003921569, 0.03137255, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_80gdj"]
-material = SubResource("StandardMaterial3D_k73tv")
+[sub_resource type="CylinderMesh" id="CylinderMesh_d7bsv"]
+material = SubResource("ShaderMaterial_c1vxw")
 top_radius = 0.3
 bottom_radius = 0.31
 height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k73tv"]
+albedo_color = Color(0.85882354, 0.003921569, 0.03137255, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_f6a36"]
 material = SubResource("StandardMaterial3D_k73tv")
@@ -485,6 +759,7 @@ tracks/21/keys = {
 
 [sub_resource type="Animation" id="Animation_7uu5j"]
 resource_name = "light_attack_proto"
+step = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1114,7 +1389,7 @@ mesh = SubResource("CapsuleMesh_t5jfb")
 
 [node name="Eye2" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Eyes" unique_id=1015833619]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0, 0)
-mesh = SubResource("CapsuleMesh_t5jfb")
+mesh = SubResource("CapsuleMesh_ren3s")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Player/Ryu/Visual/Body/Eyes" unique_id=844317790]
 libraries/ = SubResource("AnimationLibrary_mlc7w")
@@ -1146,7 +1421,7 @@ mesh = SubResource("SphereMesh_c2xmk")
 
 [node name="Bands" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Hands/Hand2" unique_id=1605959845]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.026733398, 0)
-mesh = SubResource("CylinderMesh_p7od3")
+mesh = SubResource("CylinderMesh_i7arx")
 
 [node name="HandKatana" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Hands/Hand2" unique_id=1628581295]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -2.9802322e-08, -0.02147007, 0.2684538)
@@ -1173,11 +1448,11 @@ mesh = SubResource("CylinderMesh_f6a36")
 
 [node name="Pants" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Clouths" unique_id=2064528259]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3774501, 0)
-mesh = SubResource("CylinderMesh_mlc7w")
+mesh = SubResource("CylinderMesh_ej3m0")
 
 [node name="Hatayate" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Clouths" unique_id=1190210913]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4887389, 0)
-mesh = SubResource("CylinderMesh_80gdj")
+mesh = SubResource("CylinderMesh_d7bsv")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Clouths/Hatayate" unique_id=326751410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2970521)
