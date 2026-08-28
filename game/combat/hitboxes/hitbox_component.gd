@@ -74,7 +74,6 @@ func activate_attack(
 		push_error(
 			"HitboxComponent received a null attack."
 		)
-
 		return false
 
 	var validation_errors := (
@@ -88,7 +87,6 @@ func activate_attack(
 				validation_errors
 			)
 		)
-
 		return false
 
 	if source_asc == null:
@@ -172,9 +170,7 @@ func _on_area_entered(
 		target_asc.get_instance_id()
 	)
 
-	if _hit_targets.has(
-		target_id
-	):
+	if _hit_targets.has(target_id):
 		return
 
 	_hit_targets[target_id] = true
@@ -203,6 +199,11 @@ func _on_area_entered(
 		context
 	)
 
+	_send_hit_received_event(
+		target_asc,
+		context
+	)
+
 	_send_hit_confirmed_event(
 		context
 	)
@@ -210,6 +211,41 @@ func _on_area_entered(
 	hit_confirmed.emit(
 		hurtbox,
 		context
+	)
+
+
+# ============================================================================
+# Gameplay Events
+# ============================================================================
+
+func _send_hit_received_event(
+	target_asc: AbilitySystemComponent,
+	context: AbilityContext
+) -> void:
+	if target_asc == null:
+		return
+
+	var event_tag := GameplayTag.new()
+
+	event_tag.tag_name = (
+		WORGameplayTags
+		.EVENT_COMBAT_HIT_RECEIVED
+	)
+
+	var event := GameplayEvent.create(
+		event_tag,
+		context.duplicate_context(),
+		{
+			"ability": _get_active_ability_name(),
+			"attack": String(
+				_active_attack.attack_id
+			),
+			"reaction": _active_attack.hit_reaction,
+		}
+	)
+
+	target_asc.send_gameplay_event(
+		event
 	)
 
 
@@ -226,25 +262,11 @@ func _send_hit_confirmed_event(
 		.EVENT_COMBAT_HIT_CONFIRMED
 	)
 
-	var ability_name: StringName = &""
-
-	if (
-		_active_ability != null
-		and _active_ability.ability_tag != null
-	):
-		ability_name = (
-			_active_ability
-			.ability_tag
-			.tag_name
-		)
-
 	var event := GameplayEvent.create(
 		event_tag,
 		context.duplicate_context(),
 		{
-			"ability": String(
-				ability_name
-			),
+			"ability": _get_active_ability_name(),
 			"attack": String(
 				_active_attack.attack_id
 			),
@@ -253,4 +275,18 @@ func _send_hit_confirmed_event(
 
 	source_asc.send_gameplay_event(
 		event
+	)
+
+
+func _get_active_ability_name() -> String:
+	if (
+		_active_ability == null
+		or _active_ability.ability_tag == null
+	):
+		return ""
+
+	return String(
+		_active_ability
+		.ability_tag
+		.tag_name
 	)

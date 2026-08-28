@@ -36,6 +36,9 @@
 [ext_resource type="Resource" uid="uid://so6kfybfevgc" path="res://game/characters/player/ryu/resources/light_combo.tres" id="28_3uay0"]
 [ext_resource type="Resource" uid="uid://btuauwxu767cu" path="res://game/characters/player/ryu/resources/light_attack_02_animation_binding.tres" id="28_a8vxj"]
 [ext_resource type="Resource" uid="uid://m5sv3vxro00h" path="res://game/characters/player/ryu/resources/light_attack_03_animation_binding.tres" id="29_yddqy"]
+[ext_resource type="Script" uid="uid://d3boexliuhthf" path="res://game/movement/character_movement_config.gd" id="37_1bxsr"]
+[ext_resource type="Script" uid="uid://c3aev24qp70kr" path="res://game/combat/reactions/hit_reaction_component.gd" id="37_383lj"]
+[ext_resource type="Script" uid="uid://co83by6vvfsvn" path="res://development/test_actors/target_dummy/target_dummy_motion_driver.gd" id="39_ren3s"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0ojxy"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -79,7 +82,7 @@ height = 1.4
 render_priority = 0
 shader = ExtResource("10_oc4u6")
 shader_parameter/outline_color = Color(0.02, 0.02, 0.02, 1)
-shader_parameter/outline_size = 0.015
+shader_parameter/outline_width = 3.0
 
 [sub_resource type="Shader" id="Shader_rmr2g"]
 code = "shader_type spatial;
@@ -288,7 +291,7 @@ height = 0.2
 render_priority = 0
 shader = ExtResource("10_oc4u6")
 shader_parameter/outline_color = Color(0.02, 0.02, 0.02, 1)
-shader_parameter/outline_size = 0.015
+shader_parameter/outline_width = 3.0
 
 [sub_resource type="Gradient" id="Gradient_1bxsr"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -373,7 +376,7 @@ font_size = 72
 render_priority = 0
 shader = ExtResource("10_oc4u6")
 shader_parameter/outline_color = Color(0.02, 0.02, 0.02, 1)
-shader_parameter/outline_size = 0.015
+shader_parameter/outline_width = 3.0
 
 [sub_resource type="Gradient" id="Gradient_uao57"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -392,12 +395,12 @@ shader_parameter/albedo_affect = 0.0
 shader_parameter/use_stepped = true
 shader_parameter/steps = 3.0
 shader_parameter/step_smoothness = 0.0
-shader_parameter/shadow_tint = Color(0, 0, 0.654902, 1)
+shader_parameter/shadow_tint = Color(0.38378882, 0.08537518, 0.027403507, 1)
 shader_parameter/shadow_tint_amount = 0.4
 shader_parameter/specular = 0.0
 shader_parameter/normal_strength = 0.0
 shader_parameter/use_rim = true
-shader_parameter/rim_color = Color(0.580392, 1, 1, 1)
+shader_parameter/rim_color = Color(0.9948769, 0.8937595, 0.8377418, 1)
 shader_parameter/rim_amount = 1.5
 shader_parameter/rim_smoothness = 0.0
 shader_parameter/rim_mask_shadow = 1.0
@@ -420,7 +423,7 @@ height = 0.25
 render_priority = 0
 shader = ExtResource("10_oc4u6")
 shader_parameter/outline_color = Color(0.02, 0.02, 0.02, 1)
-shader_parameter/outline_size = 0.015
+shader_parameter/outline_width = 3.0
 
 [sub_resource type="Gradient" id="Gradient_fg0rt"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -1097,10 +1100,10 @@ tracks/0/path = NodePath("Visual/Body:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.099999994, 0.24326962, 0.4, 0.4026532, 0.44627395, 0.63250107, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.099999994, 0.24326962, 0.4, 0.4026532, 0.63250107, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(-5.9001093e-09, 0, 0.067489386), Vector3(-1.814704e-08, 0, 0.20757794), Vector3(-1.814704e-08, 0, 0.20757794), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0.35974765, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
+"values": [Vector3(-5.9001093e-09, 0, 0.067489386), Vector3(-1.814704e-08, 0, 0.20757794), Vector3(-1.814704e-08, 0, 0.20757794), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1205,11 +1208,17 @@ tracks/9/path = NodePath("Components/AnimationCombatBridge")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0.26666668, 0.4),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0.23333333, 0.26666668, 0.36666667, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "values": [{
+"args": [&"Lunge"],
+"method": &"apply_attack_motion"
+}, {
 "args": [],
 "method": &"open_hitbox"
+}, {
+"args": [&"Lift"],
+"method": &"apply_attack_motion"
 }, {
 "args": [],
 "method": &"close_hitbox"
@@ -1273,6 +1282,10 @@ radius = 0.4
 height = 1.7
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5pd38"]
+
+[sub_resource type="Resource" id="Resource_t5jfb"]
+script = ExtResource("37_1bxsr")
+metadata/_custom_type_script = "uid://d3boexliuhthf"
 
 [node name="DevArena" type="Node3D" unique_id=1602664160]
 
@@ -1563,10 +1576,11 @@ script = ExtResource("19_8wnq3")
 locomotion_state_machine = NodePath("../LocomotionHFSM")
 ability_system = NodePath("../AbilitySystemComponent")
 
-[node name="AnimationCombatBridge" type="Node" parent="Player/Ryu/Components" unique_id=1226470637 node_paths=PackedStringArray("ability_system", "animation_player", "hitboxes")]
+[node name="AnimationCombatBridge" type="Node" parent="Player/Ryu/Components" unique_id=1226470637 node_paths=PackedStringArray("ability_system", "animation_player", "movement_component", "hitboxes")]
 script = ExtResource("23_576yk")
 ability_system = NodePath("../AbilitySystemComponent")
 animation_player = NodePath("../../Visual/CombatAnimationPlayer")
+movement_component = NodePath("../MovementComponent")
 animation_finished_event_tag = SubResource("Resource_f6a36")
 hitboxes = [NodePath("../../Combat/HitBox")]
 bindings = Array[ExtResource("25_7uu5j")]([ExtResource("26_qchnr"), ExtResource("28_a8vxj"), ExtResource("29_yddqy")])
@@ -1576,6 +1590,12 @@ script = ExtResource("27_qchnr")
 ability_system = NodePath("../AbilitySystemComponent")
 animation_combat_bridge = NodePath("../AnimationCombatBridge")
 combo_definition = ExtResource("28_3uay0")
+
+[node name="HitReactionComponent" type="Node" parent="Player/Ryu/Components" unique_id=1083134819 node_paths=PackedStringArray("ability_system", "movement_component")]
+script = ExtResource("37_383lj")
+ability_system = NodePath("../AbilitySystemComponent")
+movement_component = NodePath("../MovementComponent")
+metadata/_custom_type_script = "uid://c3aev24qp70kr"
 
 [node name="CombatTest" type="Node3D" parent="." unique_id=1595079260]
 
@@ -1605,3 +1625,20 @@ shape = SubResource("CapsuleShape3D_5pd38")
 script = ExtResource("9_jcwrd")
 initial_attribute_sets = Array[ExtResource("10_ovd1s")]([ExtResource("19_m1xnf")])
 metadata/_custom_type_script = "uid://bvff6yf1rcj4r"
+
+[node name="MovementComponent" type="Node" parent="CombatTest/Dummy/Components" unique_id=42899527 node_paths=PackedStringArray("body")]
+script = ExtResource("6_k73tv")
+body = NodePath("../..")
+config = SubResource("Resource_t5jfb")
+metadata/_custom_type_script = "uid://d5nahfrkedod"
+
+[node name="HitReactionComponent" type="Node" parent="CombatTest/Dummy/Components" unique_id=1087686081 node_paths=PackedStringArray("ability_system", "movement_component")]
+script = ExtResource("37_383lj")
+ability_system = NodePath("../AbilitySystemComponent")
+movement_component = NodePath("../MovementComponent")
+metadata/_custom_type_script = "uid://c3aev24qp70kr"
+
+[node name="TargetDummyMotionDriver" type="Node" parent="CombatTest/Dummy/Components" unique_id=734540181 node_paths=PackedStringArray("movement_component")]
+script = ExtResource("39_ren3s")
+movement_component = NodePath("../MovementComponent")
+metadata/_custom_type_script = "uid://co83by6vvfsvn"

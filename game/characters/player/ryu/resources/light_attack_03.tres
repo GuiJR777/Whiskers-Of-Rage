@@ -1,10 +1,27 @@
 [gd_resource type="Resource" script_class="MeleeAttackDefinition" format=3 uid="uid://87me7itg7ny"]
 
 [ext_resource type="Script" uid="uid://csie0hg80rn6i" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag.gd" id="1_q0xvg"]
+[ext_resource type="Script" uid="uid://dnsi5675fvxgf" path="res://game/combat/attacks/attack_motion_definition.gd" id="1_vhb21"]
 [ext_resource type="Script" uid="uid://cq6av1hppr15k" path="res://addons/wor_gameplay_framework/runtime/effects/gameplay_modifier.gd" id="2_57b51"]
 [ext_resource type="Script" uid="uid://ht4hgbvmd1jw" path="res://addons/wor_gameplay_framework/runtime/attributes/gameplay_attribute.gd" id="3_o8iav"]
 [ext_resource type="Script" uid="uid://mk4xy2umrvlg" path="res://addons/wor_gameplay_framework/runtime/effects/gameplay_effect.gd" id="4_vhb21"]
 [ext_resource type="Script" uid="uid://ctucb2hkrubla" path="res://game/combat/attacks/melee_attack_definition.gd" id="5_n2gkc"]
+[ext_resource type="Resource" uid="uid://cmfw3oplll5f4" path="res://game/status_effects/knockdown_effect.tres" id="6_n2gkc"]
+[ext_resource type="Script" uid="uid://c8omtfjgl8wq5" path="res://game/combat/reactions/hit_reaction_definition.gd" id="7_0u8sc"]
+
+[sub_resource type="Resource" id="Resource_jilwa"]
+script = ExtResource("1_vhb21")
+motion_id = &"Lunge"
+forward_speed = 6.0
+horizontal_deceleration = 30.0
+metadata/_custom_type_script = "uid://dnsi5675fvxgf"
+
+[sub_resource type="Resource" id="Resource_1bxsr"]
+script = ExtResource("1_vhb21")
+motion_id = &"Lift"
+forward_speed = 3.0
+upward_speed = 12.0
+metadata/_custom_type_script = "uid://dnsi5675fvxgf"
 
 [sub_resource type="Resource" id="Resource_7exj2"]
 script = ExtResource("3_o8iav")
@@ -34,8 +51,19 @@ effect_id = &"Effect.Attack.Light.Hit"
 modifiers = Array[ExtResource("2_57b51")]([SubResource("Resource_0sk1g"), SubResource("Resource_80rki")])
 metadata/_custom_type_script = "uid://mk4xy2umrvlg"
 
+[sub_resource type="Resource" id="Resource_vhb21"]
+script = ExtResource("7_0u8sc")
+horizontal_speed = 6.0
+upward_speed = 12.0
+horizontal_deceleration = 15.0
+causes_knockdown = true
+knockdown_effect = ExtResource("6_n2gkc")
+metadata/_custom_type_script = "uid://c8omtfjgl8wq5"
+
 [resource]
 script = ExtResource("5_n2gkc")
 attack_id = &"LightAttack03"
 hit_effect = SubResource("Resource_xd7te")
+hit_reaction = SubResource("Resource_vhb21")
+attack_motions = Array[ExtResource("1_vhb21")]([SubResource("Resource_jilwa"), SubResource("Resource_1bxsr")])
 metadata/_custom_type_script = "uid://ctucb2hkrubla"

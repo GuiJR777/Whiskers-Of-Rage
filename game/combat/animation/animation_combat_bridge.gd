@@ -10,6 +10,11 @@ var ability_system: AbilitySystemComponent
 @export
 var animation_player: AnimationPlayer
 
+@export_category("Movement")
+
+@export
+var movement_component: MovementComponent
+
 
 @export_category("Gameplay Events")
 
@@ -450,3 +455,58 @@ func _get_hitbox(
 			return hitbox
 
 	return null
+
+# ============================================================================
+# Animation Method Track API - Attack Motion
+# ============================================================================
+
+func apply_attack_motion(
+	motion_id: StringName
+) -> void:
+	if _active_binding == null:
+		return
+
+	if movement_component == null:
+		push_error(
+			"AnimationCombatBridge requires a MovementComponent for attack motion."
+		)
+		return
+
+	var attack := (
+		_active_binding.attack_definition
+	)
+
+	if attack == null:
+		return
+
+	var motion := (
+		attack.get_attack_motion(
+			motion_id
+		)
+	)
+
+	if motion == null:
+		push_error(
+			"Attack '%s' does not contain motion '%s'."
+			% [
+				String(
+					attack.attack_id
+				),
+				String(
+					motion_id
+				),
+			]
+		)
+		return
+
+	var forward := (
+		movement_component
+		.get_forward_direction()
+	)
+
+	movement_component.apply_forced_motion(
+		forward,
+		motion.forward_speed,
+		motion.upward_speed,
+		motion.horizontal_deceleration
+	)

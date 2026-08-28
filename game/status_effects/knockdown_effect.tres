@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="GameplayEffect" format=3 uid="uid://cmfw3oplll5f4"]
+
+[ext_resource type="Script" uid="uid://csie0hg80rn6i" path="res://addons/wor_gameplay_framework/runtime/tags/gameplay_tag.gd" id="1_jilwa"]
+[ext_resource type="Script" uid="uid://cq6av1hppr15k" path="res://addons/wor_gameplay_framework/runtime/effects/gameplay_modifier.gd" id="2_ej1n4"]
+[ext_resource type="Script" uid="uid://mk4xy2umrvlg" path="res://addons/wor_gameplay_framework/runtime/effects/gameplay_effect.gd" id="3_r5wd2"]
+
+[sub_resource type="Resource" id="Resource_2x5mg"]
+script = ExtResource("1_jilwa")
+tag_name = &"State.KnockedDown"
+
+[resource]
+script = ExtResource("3_r5wd2")
+effect_id = &"Effect.State.KnockedDown"
+duration_policy = 1
+duration = 1.2
+granted_tags = Array[ExtResource("1_jilwa")]([SubResource("Resource_2x5mg")])
+metadata/_custom_type_script = "uid://mk4xy2umrvlg"

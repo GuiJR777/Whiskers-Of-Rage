@@ -21,6 +21,10 @@ const STATE_FALLING: StringName = &"State.Falling"
 
 const STATE_ATTACKING: StringName = &"State.Attacking"
 
+const STATE_KNOCKED_DOWN: StringName = (
+	&"State.KnockedDown"
+)
+
 
 # ============================================================================
 # Abilities
@@ -62,4 +66,8 @@ const EVENT_COMBAT_COMBO_WINDOW_OPEN: StringName = (
 
 const EVENT_COMBAT_COMBO_WINDOW_CLOSE: StringName = (
 	&"Event.Combat.ComboWindow.Close"
+)
+
+const EVENT_COMBAT_HIT_RECEIVED: StringName = (
+	&"Event.Combat.Hit.Received"
 )
