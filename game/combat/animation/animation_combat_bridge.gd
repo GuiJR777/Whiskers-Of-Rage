@@ -2,13 +2,18 @@ class_name AnimationCombatBridge
 extends Node
 
 
+# ============================================================================
+# References
+# ============================================================================
+
 @export_category("References")
 
 @export
 var ability_system: AbilitySystemComponent
 
 @export
-var animation_player: AnimationPlayer
+var animation_controller: CharacterAnimationController
+
 
 @export_category("Movement")
 
@@ -34,6 +39,10 @@ var hitboxes: Array[HitboxComponent] = []
 var bindings: Array[CombatAnimationBinding] = []
 
 
+# ============================================================================
+# Runtime
+# ============================================================================
+
 var _active_handle: int = (
 	AbilitySystemComponent.INVALID_ABILITY_HANDLE
 )
@@ -52,6 +61,10 @@ var _combo_window_open: bool = false
 var _preserve_animation_on_cancel: bool = false
 
 
+# ============================================================================
+# Godot Lifecycle
+# ============================================================================
+
 func _ready() -> void:
 	if ability_system == null:
 		push_error(
@@ -59,9 +72,9 @@ func _ready() -> void:
 		)
 		return
 
-	if animation_player == null:
+	if animation_controller == null:
 		push_error(
-			"AnimationCombatBridge requires an AnimationPlayer."
+			"AnimationCombatBridge requires a CharacterAnimationController."
 		)
 		return
 
@@ -86,8 +99,8 @@ func _ready() -> void:
 		_on_ability_cancelled
 	)
 
-	animation_player.animation_finished.connect(
-		_on_animation_finished
+	animation_controller.action_finished.connect(
+		_on_action_animation_finished
 	)
 
 
@@ -112,11 +125,10 @@ func open_hitbox() -> void:
 	if hitbox == null:
 		push_error(
 			"AnimationCombatBridge cannot find hitbox '%s'."
-			% String(
+			% str(
 				_active_binding.hitbox_id
 			)
 		)
-
 		return
 
 	if not hitbox.activate_attack(
@@ -152,7 +164,7 @@ func open_combo_window() -> void:
 
 	_send_combat_event(
 		WORGameplayTags
-			.EVENT_COMBAT_COMBO_WINDOW_OPEN
+		.EVENT_COMBAT_COMBO_WINDOW_OPEN
 	)
 
 
@@ -164,7 +176,59 @@ func close_combo_window() -> void:
 
 	_send_combat_event(
 		WORGameplayTags
-			.EVENT_COMBAT_COMBO_WINDOW_CLOSE
+		.EVENT_COMBAT_COMBO_WINDOW_CLOSE
+	)
+
+
+# ============================================================================
+# Animation Method Track API - Attack Motion
+# ============================================================================
+
+func apply_attack_motion(
+	motion_id: StringName
+) -> void:
+	if _active_binding == null:
+		return
+
+	if movement_component == null:
+		push_error(
+			"AnimationCombatBridge requires a MovementComponent for attack motion."
+		)
+		return
+
+	var attack := (
+		_active_binding.attack_definition
+	)
+
+	if attack == null:
+		return
+
+	var motion := (
+		attack.get_attack_motion(
+			motion_id
+		)
+	)
+
+	if motion == null:
+		push_error(
+			"Attack '%s' does not contain motion '%s'."
+			% [
+				str(attack.attack_id),
+				str(motion_id),
+			]
+		)
+		return
+
+	var forward := (
+		movement_component
+		.get_forward_direction()
+	)
+
+	movement_component.apply_forced_motion(
+		forward,
+		motion.forward_speed,
+		motion.upward_speed,
+		motion.horizontal_deceleration
 	)
 
 
@@ -195,6 +259,8 @@ func _on_ability_activated(
 		)
 	)
 
+	# Nem toda Ability precisa ser uma Ability visual
+	# controlada por este bridge.
 	if binding == null:
 		return
 
@@ -209,19 +275,6 @@ func _on_ability_activated(
 				validation_errors
 			)
 		)
-
-		return
-
-	if not animation_player.has_animation(
-		binding.animation_name
-	):
-		push_error(
-			"Animation '%s' was not found."
-			% String(
-				binding.animation_name
-			)
-		)
-
 		return
 
 	close_hitbox()
@@ -239,10 +292,19 @@ func _on_ability_activated(
 		else AbilityContext.new()
 	)
 
-	animation_player.play(
-		binding.animation_name,
-		binding.transition_blend_time
+	var accepted := (
+		animation_controller.play_action(
+			binding.animation_name
+		)
 	)
+
+	if not accepted:
+		push_error(
+			"AnimationCombatBridge could not play action state '%s'."
+			% str(
+				binding.animation_name
+			)
+		)
 
 
 func _on_ability_ended(
@@ -273,14 +335,14 @@ func _on_ability_cancelled(
 # Animation Lifecycle
 # ============================================================================
 
-func _on_animation_finished(
-	animation_name: StringName
+func _on_action_animation_finished(
+	state_name: StringName
 ) -> void:
 	if _active_binding == null:
 		return
 
 	if (
-		animation_name
+		state_name
 		!= _active_binding.animation_name
 	):
 		return
@@ -312,10 +374,10 @@ func _on_animation_finished(
 		animation_finished_event_tag,
 		event_context,
 		{
-			"animation": String(
-				animation_name
+			"animation": str(
+				state_name
 			),
-			"ability": String(
+			"ability": str(
 				_active_ability
 				.ability_tag
 				.tag_name
@@ -329,10 +391,10 @@ func _on_animation_finished(
 
 
 func _finish_active_ability(
-	cancel_animation: bool
+	cancelled: bool
 ) -> void:
 	var preserve_animation := (
-		cancel_animation
+		cancelled
 		and _preserve_animation_on_cancel
 	)
 
@@ -342,14 +404,13 @@ func _finish_active_ability(
 		close_combo_window()
 
 	if (
-		cancel_animation
-		and not preserve_animation
-		and animation_player.is_playing()
+		not preserve_animation
+		and animation_controller != null
 		and _active_binding != null
-		and animation_player.current_animation
-			== _active_binding.animation_name
 	):
-		animation_player.stop()
+		animation_controller.end_action(
+			_active_binding.animation_name
+		)
 
 	_preserve_animation_on_cancel = false
 
@@ -402,7 +463,7 @@ func _send_combat_event(
 		event_tag,
 		event_context,
 		{
-			"ability": String(
+			"ability": str(
 				_active_ability
 				.ability_tag
 				.tag_name
@@ -455,58 +516,3 @@ func _get_hitbox(
 			return hitbox
 
 	return null
-
-# ============================================================================
-# Animation Method Track API - Attack Motion
-# ============================================================================
-
-func apply_attack_motion(
-	motion_id: StringName
-) -> void:
-	if _active_binding == null:
-		return
-
-	if movement_component == null:
-		push_error(
-			"AnimationCombatBridge requires a MovementComponent for attack motion."
-		)
-		return
-
-	var attack := (
-		_active_binding.attack_definition
-	)
-
-	if attack == null:
-		return
-
-	var motion := (
-		attack.get_attack_motion(
-			motion_id
-		)
-	)
-
-	if motion == null:
-		push_error(
-			"Attack '%s' does not contain motion '%s'."
-			% [
-				String(
-					attack.attack_id
-				),
-				String(
-					motion_id
-				),
-			]
-		)
-		return
-
-	var forward := (
-		movement_component
-		.get_forward_direction()
-	)
-
-	movement_component.apply_forced_motion(
-		forward,
-		motion.forward_speed,
-		motion.upward_speed,
-		motion.horizontal_deceleration
-	)

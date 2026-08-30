@@ -759,6 +759,263 @@ tracks/21/keys = {
 "update": 0,
 "values": [Vector3(-0.29416656, -0.19134521, -0.1151917)]
 }
+tracks/22/type = "value"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("Visual/Body/Eyes:position")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.3406011, 0.29930508)]
+}
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("Visual/Body/Clouths/Hatayate/MeshInstance3D:rotation")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/24/type = "value"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("Visual/Body/Ears:position")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/25/type = "value"
+tracks/25/imported = false
+tracks/25/enabled = true
+tracks/25/path = NodePath("Visual/Body/Ears:rotation")
+tracks/25/interp = 1
+tracks/25/loop_wrap = true
+tracks/25/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/26/type = "value"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("Visual/Body/Hands:position")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("Visual/Body/Hands:rotation")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_i7arx"]
+resource_name = "fall"
+length = 0.3
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual/Body:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.075075984, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual/Body:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.9, 1.1, 0.9)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visual/Body/Eyes:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-1.7763568e-15, 0.270478, 0.2993051)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visual/Body/Clouths/Hatayate/MeshInstance3D:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.47308227, 3.1415925, 3.1415925), Vector3(0.07546417, 3.1415925, 3.1415925), Vector3(0.47308227, 3.1415925, 3.1415925)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visual/Body/Hands:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.41287434, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visual/Body/Hands:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.0268437, 3.1415925, -3.1415927)]
+}
+
+[sub_resource type="Animation" id="Animation_1bxsr"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+step = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual/Body:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.98, 0.98, 0.98), Vector3(1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual/Body:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.016683578, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_8hr01"]
+resource_name = "jump"
+length = 0.3
+loop_mode = 1
+step = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual/Body:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.076285005, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual/Body:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.9, 1.1, 0.9)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visual/Body/Eyes:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-1.7763568e-15, 0.38130975, 0.2993051)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visual/Body/Clouths/Hatayate/MeshInstance3D:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.2730084, 3.3623095e-09, 2.4478355e-08), Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visual/Body/Ears:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.16698308, 1.2331391e-09, -1.4735339e-08)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visual/Body/Hands:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -0.14954925, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_7uu5j"]
 resource_name = "light_attack_proto"
@@ -1252,13 +1509,111 @@ tracks/11/keys = {
 "values": [Vector3(-0.3951187, -0.28915405, -0.35456252), Vector3(0.07228851, 0.10803604, -0.43137455), Vector3(0.0027249753, 0.031621695, -0.45659685), Vector3(0.47693634, 1.0326037, 0.19604754)]
 }
 
+[sub_resource type="Animation" id="Animation_ren3s"]
+resource_name = "move"
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual/Body:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-4.1324695e-09, 0, 0.04726994), Vector3(-4.861732e-09, -0.019464016, 0.05561173), Vector3(-4.1324695e-09, 0, 0.04726994)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual/Body:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.074243054, 2.4149674e-10, 6.5024857e-09)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visual/Body:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.96, 0.96, 0.96), Vector3(1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visual/Body/Hands/Hand:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.39999998, -0.22131026, 0.18720716), Vector3(0.4, -0.291, 0), Vector3(0.4, -0.203, -0.171)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visual/Body/Hands/Hand2:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.4, -0.20334315, -0.17102796), Vector3(-0.4, -0.291, 0), Vector3(-0.4, -0.221, 0.187)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qchnr"]
 _data = {
 &"RESET": SubResource("Animation_nahmr"),
+&"fall": SubResource("Animation_i7arx"),
+&"idle": SubResource("Animation_1bxsr"),
+&"jump": SubResource("Animation_8hr01"),
 &"light_attack_01": SubResource("Animation_7uu5j"),
 &"light_attack_02": SubResource("Animation_qchnr"),
-&"light_attack_03": SubResource("Animation_3uay0")
+&"light_attack_03": SubResource("Animation_3uay0"),
+&"move": SubResource("Animation_ren3s")
 }
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_i7arx"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uao57"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qcvml"]
+animation = &"move"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_c1vxw"]
+states/idle/node = SubResource("AnimationNodeAnimation_uao57")
+states/idle/position = Vector2(326.8, 41.6)
+states/move/node = SubResource("AnimationNodeAnimation_qcvml")
+states/move/position = Vector2(439.6, 136.8)
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gp8vx"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fg0rt"]
+xfade_time = 0.08
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cjvq6"]
+xfade_time = 0.08
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_f6a36"]
+states/Action/node = SubResource("AnimationNodeStateMachine_i7arx")
+states/Action/position = Vector2(529.52, 160)
+states/Locomotion/node = SubResource("AnimationNodeStateMachine_c1vxw")
+states/Locomotion/position = Vector2(530, 56.800003)
+transitions = ["Start", "Locomotion", SubResource("AnimationNodeStateMachineTransition_gp8vx"), "Locomotion", "Action", SubResource("AnimationNodeStateMachineTransition_fg0rt"), "Action", "Locomotion", SubResource("AnimationNodeStateMachineTransition_cjvq6")]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f6a36"]
 radius = 0.3
@@ -1302,6 +1657,7 @@ transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545
 shadow_enabled = true
 
 [node name="Arena" type="Node3D" parent="World" unique_id=50667888]
+visible = false
 
 [node name="Floor" type="StaticBody3D" parent="World/Arena" unique_id=837428084]
 
@@ -1356,7 +1712,7 @@ max_pitch = 15.0
 
 [node name="Camera3D" type="Camera3D" parent="CameraRig" unique_id=1976480761]
 physics_interpolation_mode = 1
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4907222, 5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8330239, 5)
 top_level = true
 
 [node name="PhantomCameraHost" type="Node" parent="CameraRig/Camera3D" unique_id=433173221]
@@ -1365,7 +1721,7 @@ process_physics_priority = 300
 script = ExtResource("1_iqjut")
 
 [node name="PhantomCamera3D" type="Node3D" parent="CameraRig" unique_id=1863975033 node_paths=PackedStringArray("follow_target")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4907222, 5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8330239, 5)
 script = ExtResource("2_rw1dt")
 priority = 1
 follow_mode = 6
@@ -1407,11 +1763,12 @@ mesh = SubResource("CapsuleMesh_t5jfb")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0, 0)
 mesh = SubResource("CapsuleMesh_ren3s")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Player/Ryu/Visual/Body/Eyes" unique_id=844317790]
+[node name="EyesAnimationPlayer" type="AnimationPlayer" parent="Player/Ryu/Visual/Body/Eyes" unique_id=844317790]
 libraries/ = SubResource("AnimationLibrary_mlc7w")
 autoplay = &"blink"
 
 [node name="Ears" type="Node3D" parent="Player/Ryu/Visual/Body" unique_id=353099886]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Ear" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Ears" unique_id=389977758]
 transform = Transform3D(0.96677554, -0.25562674, 0, 0.25562674, 0.96677554, 0, 0, 0, 1, -0.11798972, 0.71222186, 0)
@@ -1471,7 +1828,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4887389, 0)
 mesh = SubResource("CylinderMesh_d7bsv")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Clouths/Hatayate" unique_id=326751410]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2970521)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -5.3290705e-15, 0, -0.2970521)
 mesh = SubResource("SphereMesh_f6a36")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Player/Ryu/Visual/Body/Clouths/Hatayate/MeshInstance3D" unique_id=780315096]
@@ -1498,15 +1855,20 @@ mesh = SubResource("CylinderMesh_t5jfb")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3010323, 0)
 mesh = SubResource("CylinderMesh_5pd38")
 
-[node name="CombatAnimationPlayer" type="AnimationPlayer" parent="Player/Ryu/Visual" unique_id=1227935905]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Player/Ryu/Visual" unique_id=1227935905]
 root_node = NodePath("../..")
 libraries/ = SubResource("AnimationLibrary_qchnr")
+
+[node name="AnimationTree" type="AnimationTree" parent="Player/Ryu/Visual" unique_id=1582717448]
+root_node = NodePath("../..")
+tree_root = SubResource("AnimationNodeStateMachine_f6a36")
+anim_player = NodePath("../AnimationPlayer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player/Ryu" unique_id=751194653]
 shape = SubResource("CapsuleShape3D_f6a36")
 
 [node name="CameraTarget" type="Marker3D" parent="Player/Ryu" unique_id=1041083470]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29072213, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.63302386, 0)
 
 [node name="Combat" type="Node3D" parent="Player/Ryu" unique_id=2114007673]
 
@@ -1579,10 +1941,9 @@ script = ExtResource("19_8wnq3")
 locomotion_state_machine = NodePath("../LocomotionHFSM")
 ability_system = NodePath("../AbilitySystemComponent")
 
-[node name="AnimationCombatBridge" type="Node" parent="Player/Ryu/Components" unique_id=1226470637 node_paths=PackedStringArray("ability_system", "animation_player", "movement_component", "hitboxes")]
+[node name="AnimationCombatBridge" type="Node" parent="Player/Ryu/Components" unique_id=1226470637 node_paths=PackedStringArray("ability_system", "movement_component", "hitboxes")]
 script = ExtResource("23_576yk")
 ability_system = NodePath("../AbilitySystemComponent")
-animation_player = NodePath("../../Visual/CombatAnimationPlayer")
 movement_component = NodePath("../MovementComponent")
 animation_finished_event_tag = SubResource("Resource_f6a36")
 hitboxes = [NodePath("../../Combat/HitBox")]
@@ -1601,6 +1962,7 @@ movement_component = NodePath("../MovementComponent")
 metadata/_custom_type_script = "uid://c3aev24qp70kr"
 
 [node name="CombatTest" type="Node3D" parent="." unique_id=1595079260]
+visible = false
 
 [node name="Dummy" type="CharacterBody3D" parent="CombatTest" unique_id=1538437570]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, -8.606316)
