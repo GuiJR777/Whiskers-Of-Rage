@@ -3,7 +3,7 @@
 ## Objetivo
 Permitir criar conteúdo sem editar scripts do core.
 
-## Dock principal
+## Workspace principal
 Deve oferecer navegação para:
 - Abilities
 - Effects
@@ -58,7 +58,8 @@ Ao selecionar um ASC em execução mostrar:
   `wor_gameplay_framework/tags/catalog_path`;
 - rename de uma tag registrada preserva o objeto `GameplayTag` e renomeia seus
   descendentes, mantendo referências existentes consistentes;
-- o dock `GAS` navega por Tags, Abilities, Effects, Attributes, Cues e Debugger;
+- o workspace principal `GAS`, ao lado de 2D, 3D, Script e Jogo, navega por Tags,
+  Abilities, Effects, Attributes, Cues e Debugger;
 - Abilities e Effects usam o Inspector estruturado nativo com seletores vindos do
   catálogo e um painel reativo de `validate()`;
 - propriedades incompatíveis com a duration/stacking policy do effect são ocultadas;

@@ -17,12 +17,12 @@ config/icon="res://icon.png"
 
 [autoload]
 
-WORGasRuntimeDebug="*uid://jkw33cvq2w1a"
 PhantomCameraManager="*uid://duq6jhf6unyis"
 InputManager="*uid://dmwycleyotua6"
 MCPRuntimeBridge="*res://addons/godot_mcp/services/mcp_runtime_bridge.gd"
 MCPInputBridge="*res://addons/godot_mcp/services/mcp_input_bridge.gd"
 MCPScreenshotBridge="*res://addons/godot_mcp/services/mcp_screenshot_bridge.gd"
+WORGasRuntimeDebug="*uid://jkw33cvq2w1a"
 
 [display]
 

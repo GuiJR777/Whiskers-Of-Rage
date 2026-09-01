@@ -12,8 +12,8 @@ além de inspecionar o estado de `AbilitySystemComponent` durante a execução.
 
 O projeto inclui `res://gameplay_tags.tres` como catálogo inicial.
 
-## Dock GAS
-O plugin adiciona o dock `GAS` com as áreas:
+## Workspace GAS
+O plugin adiciona a aba principal `GAS`, ao lado de 2D, 3D, Script e Jogo, com as áreas:
 - **Tags:** árvore hierárquica, busca, criação, remoção e rename de subárvore;
 - **Abilities:** lista e criação de Resources `GameplayAbility`;
 - **Effects:** lista e criação de Resources `GameplayEffect`;
@@ -50,7 +50,7 @@ As regras específicas de custo, cooldown e policies continuam documentadas em
 
 ## Runtime Debugger
 1. Execute uma cena em modo debug pelo editor.
-2. Abra `GAS > Debugger`.
+2. Abra a aba principal `GAS` e selecione `Debugger`.
 3. Escolha um ASC pelo caminho da SceneTree.
 4. Inspecione base/current attributes, tags e contagens, abilities e estados,
    cooldowns, active effects, duração, stacks, últimos GameplayEvents e warnings de
@@ -89,4 +89,4 @@ godot --headless --path . --script res://tests/editor_tools/run_editor_tools_tes
 - Não salve abilities/effects de conteúdo dentro de `addons/`.
 - Não use o debugger como fonte de estado ou regra de gameplay; snapshots são
   somente leitura.
-- Não adicione lógica específica de WOR ao dock genérico.
+- Não adicione lógica específica de WOR ao workspace genérico.

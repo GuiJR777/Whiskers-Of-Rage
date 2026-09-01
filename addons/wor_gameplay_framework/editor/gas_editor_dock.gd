@@ -14,6 +14,8 @@ var _debugger_panel: VBoxContainer
 func setup(editor_interface: EditorInterface) -> void:
 	name = "GAS"
 	custom_minimum_size = Vector2(340.0, 0.0)
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	var tabs := TabContainer.new()
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	add_child(tabs)
