@@ -1603,6 +1603,18 @@ xfade_time = 0.05
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_d7bsv"]
 xfade_time = 0.05
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_attack_01_end"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_attack_02_end"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_attack_03_end"]
+switch_mode = 2
+advance_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_i7arx"]
 states/light_attack_01/node = SubResource("AnimationNodeAnimation_i7arx")
 states/light_attack_01/position = Vector2(442, 39.199997)
@@ -1610,7 +1622,7 @@ states/light_attack_02/node = SubResource("AnimationNodeAnimation_c1vxw")
 states/light_attack_02/position = Vector2(441.84, 111.2)
 states/light_attack_03/node = SubResource("AnimationNodeAnimation_gp8vx")
 states/light_attack_03/position = Vector2(444.272, 186.4)
-transitions = ["Start", "light_attack_01", SubResource("AnimationNodeStateMachineTransition_bf4o2"), "light_attack_01", "light_attack_02", SubResource("AnimationNodeStateMachineTransition_ej3m0"), "light_attack_02", "light_attack_03", SubResource("AnimationNodeStateMachineTransition_d7bsv")]
+transitions = ["Start", "light_attack_01", SubResource("AnimationNodeStateMachineTransition_bf4o2"), "light_attack_01", "light_attack_02", SubResource("AnimationNodeStateMachineTransition_ej3m0"), "light_attack_02", "light_attack_03", SubResource("AnimationNodeStateMachineTransition_d7bsv"), "light_attack_01", "End", SubResource("AnimationNodeStateMachineTransition_attack_01_end"), "light_attack_02", "End", SubResource("AnimationNodeStateMachineTransition_attack_02_end"), "light_attack_03", "End", SubResource("AnimationNodeStateMachineTransition_attack_03_end")]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ku7nw"]
 animation = &"fall"
@@ -1666,10 +1678,11 @@ xfade_time = 0.08
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cjvq6"]
 xfade_time = 0.08
+reset = false
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_f6a36"]
 states/Action/node = SubResource("AnimationNodeStateMachine_i7arx")
-states/Action/position = Vector2(529.904, 160.8)
+states/Action/position = Vector2(530.7808, 159.2)
 states/Locomotion/node = SubResource("AnimationNodeStateMachine_c1vxw")
 states/Locomotion/position = Vector2(530, 56.800003)
 transitions = ["Start", "Locomotion", SubResource("AnimationNodeStateMachineTransition_gp8vx"), "Locomotion", "Action", SubResource("AnimationNodeStateMachineTransition_fg0rt"), "Action", "Locomotion", SubResource("AnimationNodeStateMachineTransition_cjvq6")]

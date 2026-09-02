@@ -27,6 +27,12 @@ CharacterBody3D
 9. Para player, conectar Input → intenção/Combo/ASC.
 10. Para enemy, conectar BT → ASC.
 
+Ao usar uma Root `AnimationNodeStateMachine` com estados aninhados `Locomotion` e
+`Action`, configure a transição `Action → Locomotion` com `Reset = false`. A HFSM
+continua atualizando o playback de locomotion durante a ação; desativar o reset faz
+o retorno preservar `idle`, `move`, `jump` ou `fall` em vez de reiniciar o nested
+playback no pseudoestado `Start`.
+
 ## Validação
 - attributes aparecem no debugger;
 - tags iniciais corretas;

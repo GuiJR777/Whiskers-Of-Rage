@@ -308,13 +308,12 @@ func end_action(
 
 	_pending_action_state = &""
 
-	# Não paramos a Action StateMachine.
-	#
-	# Apenas tiramos sua influência visual
-	# voltando o Root para Locomotion.
-	_apply_locomotion_state()
-
+	# Reativamos primeiro a nested Locomotion e só então aplicamos o estado
+	# corrente da HFSM. Isso evita deixar um travel solicitado enquanto a
+	# StateMachine ainda está inativa sobrescrever uma mudança posterior.
 	_enter_root_locomotion_state()
+
+	_apply_locomotion_state()
 
 	action_ended.emit(
 		previous_state
@@ -348,6 +347,17 @@ func _enter_root_action_state() -> void:
 		_root_playback.get_current_node()
 		== root_action_state
 	):
+		# Uma nova sequência pode ser ativada enquanto a saída anterior para
+		# Locomotion ainda está pendente. Nesse intervalo o Root continua
+		# reportando Action, mas concluirá a transição no próximo update e
+		# deixará o novo nested action sem influência visual.
+		#
+		# Reiniciar o próprio estado sem reset cancela essa saída pendente e
+		# preserva o playback aninhado, que será iniciado pelo fluxo chamador.
+		_root_playback.start(
+			root_action_state,
+			false
+		)
 		return
 
 	_root_playback.travel(

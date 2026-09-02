@@ -19,6 +19,10 @@ Claro. Para adicionar mais um ataque ao combo atual:
   * task `WaitGameplayEvent(Event.Animation.AbilityFinished)`
 * Adicionar essa Ability no `Initial Abilities` do ASC do Ryu.
 * Criar a animação `light_attack_03`.
+* Na StateMachine `Action` do `AnimationTree`, criar uma transição do novo estado
+  para `End` com `Advance Mode = Auto` e `Switch Mode = At End`. Essa transição
+  encerra o playback do estado e dispara `action_finished`; sem ela, a ability que
+  aguarda `Event.Animation.AbilityFinished` permanece ativa.
 * Criar `light_attack_03_animation_binding.tres` apontando para:
 
   * `Ability.Attack.Light.03`
@@ -93,4 +97,3 @@ M4. Até lá, o sandbox usa uma espera determinística para representar o frame 
 - ligar hitbox permanentemente;
 - duplicar cooldown no input;
 - controlar regra de dano no AnimationPlayer.
-
