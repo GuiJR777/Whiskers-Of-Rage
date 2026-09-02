@@ -33,7 +33,9 @@
 [ext_resource type="Script" uid="uid://jbccc1jhdm17" path="res://game/combat/animation/combat_animation_binding.gd" id="25_7uu5j"]
 [ext_resource type="Resource" uid="uid://b1ukehkeqvvwy" path="res://game/characters/player/ryu/resources/light_attack_animation_binding.tres" id="26_qchnr"]
 [ext_resource type="Script" uid="uid://vad4ip6d8h6k" path="res://game/combat/combos/combo_component.gd" id="27_qchnr"]
+[ext_resource type="Script" uid="uid://du1sann85qqhc" path="res://game/characters/shared/animations/character_animation_controller.gd" id="27_ren3s"]
 [ext_resource type="Resource" uid="uid://so6kfybfevgc" path="res://game/characters/player/ryu/resources/light_combo.tres" id="28_3uay0"]
+[ext_resource type="Script" uid="uid://cwe2a02g1qid6" path="res://game/characters/shared/animations/locomotion_animation_bridge.gd" id="28_8hr01"]
 [ext_resource type="Resource" uid="uid://btuauwxu767cu" path="res://game/characters/player/ryu/resources/light_attack_02_animation_binding.tres" id="28_a8vxj"]
 [ext_resource type="Resource" uid="uid://m5sv3vxro00h" path="res://game/characters/player/ryu/resources/light_attack_03_animation_binding.tres" id="29_yddqy"]
 [ext_resource type="Script" uid="uid://d3boexliuhthf" path="res://game/movement/character_movement_config.gd" id="37_1bxsr"]
@@ -942,7 +944,6 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="Animation_8hr01"]
 resource_name = "jump"
 length = 0.3
-loop_mode = 1
 step = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -1585,19 +1586,77 @@ _data = {
 &"move": SubResource("Animation_ren3s")
 }
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i7arx"]
+animation = &"light_attack_01"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_c1vxw"]
+animation = &"light_attack_02"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gp8vx"]
+animation = &"light_attack_03"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bf4o2"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ej3m0"]
+xfade_time = 0.05
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_d7bsv"]
+xfade_time = 0.05
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_i7arx"]
+states/light_attack_01/node = SubResource("AnimationNodeAnimation_i7arx")
+states/light_attack_01/position = Vector2(442, 39.199997)
+states/light_attack_02/node = SubResource("AnimationNodeAnimation_c1vxw")
+states/light_attack_02/position = Vector2(441.84, 111.2)
+states/light_attack_03/node = SubResource("AnimationNodeAnimation_gp8vx")
+states/light_attack_03/position = Vector2(444.272, 186.4)
+transitions = ["Start", "light_attack_01", SubResource("AnimationNodeStateMachineTransition_bf4o2"), "light_attack_01", "light_attack_02", SubResource("AnimationNodeStateMachineTransition_ej3m0"), "light_attack_02", "light_attack_03", SubResource("AnimationNodeStateMachineTransition_d7bsv")]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ku7nw"]
+animation = &"fall"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uao57"]
 animation = &"idle"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_q66qb"]
+animation = &"jump"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qcvml"]
 animation = &"move"
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7duml"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xfljn"]
+xfade_time = 0.12
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xbqqe"]
+xfade_time = 0.12
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_k6bkh"]
+xfade_time = 0.05
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hwpv2"]
+xfade_time = 0.08
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4tmk1"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_57abp"]
+xfade_time = 0.05
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hq1d6"]
+xfade_time = 0.1
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_c1vxw"]
+states/fall/node = SubResource("AnimationNodeAnimation_ku7nw")
+states/fall/position = Vector2(486.96, 25.279999)
 states/idle/node = SubResource("AnimationNodeAnimation_uao57")
-states/idle/position = Vector2(326.8, 41.6)
+states/idle/position = Vector2(338.8, 133.50272)
+states/jump/node = SubResource("AnimationNodeAnimation_q66qb")
+states/jump/position = Vector2(362.80002, 25.600006)
 states/move/node = SubResource("AnimationNodeAnimation_qcvml")
-states/move/position = Vector2(439.6, 136.8)
+states/move/position = Vector2(495.728, 133.63199)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_7duml"), "idle", "move", SubResource("AnimationNodeStateMachineTransition_xfljn"), "move", "idle", SubResource("AnimationNodeStateMachineTransition_xbqqe"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_k6bkh"), "jump", "fall", SubResource("AnimationNodeStateMachineTransition_hwpv2"), "fall", "idle", SubResource("AnimationNodeStateMachineTransition_4tmk1"), "move", "jump", SubResource("AnimationNodeStateMachineTransition_57abp"), "fall", "move", SubResource("AnimationNodeStateMachineTransition_hq1d6")]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gp8vx"]
 advance_mode = 2
@@ -1657,7 +1716,6 @@ transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545
 shadow_enabled = true
 
 [node name="Arena" type="Node3D" parent="World" unique_id=50667888]
-visible = false
 
 [node name="Floor" type="StaticBody3D" parent="World/Arena" unique_id=837428084]
 
@@ -1941,9 +1999,21 @@ script = ExtResource("19_8wnq3")
 locomotion_state_machine = NodePath("../LocomotionHFSM")
 ability_system = NodePath("../AbilitySystemComponent")
 
-[node name="AnimationCombatBridge" type="Node" parent="Player/Ryu/Components" unique_id=1226470637 node_paths=PackedStringArray("ability_system", "movement_component", "hitboxes")]
+[node name="CharacterAnimationController" type="Node" parent="Player/Ryu/Components" unique_id=709784834 node_paths=PackedStringArray("animation_tree")]
+script = ExtResource("27_ren3s")
+animation_tree = NodePath("../../Visual/AnimationTree")
+metadata/_custom_type_script = "uid://du1sann85qqhc"
+
+[node name="LocomotionAnimationBridge" type="Node" parent="Player/Ryu/Components" unique_id=711673093 node_paths=PackedStringArray("locomotion_state_machine", "animation_controller")]
+script = ExtResource("28_8hr01")
+locomotion_state_machine = NodePath("../LocomotionHFSM")
+animation_controller = NodePath("../CharacterAnimationController")
+metadata/_custom_type_script = "uid://cwe2a02g1qid6"
+
+[node name="AnimationCombatBridge" type="Node" parent="Player/Ryu/Components" unique_id=1226470637 node_paths=PackedStringArray("ability_system", "animation_controller", "movement_component", "hitboxes")]
 script = ExtResource("23_576yk")
 ability_system = NodePath("../AbilitySystemComponent")
+animation_controller = NodePath("../CharacterAnimationController")
 movement_component = NodePath("../MovementComponent")
 animation_finished_event_tag = SubResource("Resource_f6a36")
 hitboxes = [NodePath("../../Combat/HitBox")]
@@ -1962,7 +2032,6 @@ movement_component = NodePath("../MovementComponent")
 metadata/_custom_type_script = "uid://c3aev24qp70kr"
 
 [node name="CombatTest" type="Node3D" parent="." unique_id=1595079260]
-visible = false
 
 [node name="Dummy" type="CharacterBody3D" parent="CombatTest" unique_id=1538437570]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, -8.606316)
