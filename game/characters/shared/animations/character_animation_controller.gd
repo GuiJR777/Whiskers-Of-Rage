@@ -63,6 +63,9 @@ var _desired_locomotion_state: StringName = &""
 
 var _active_action_state: StringName = &""
 
+var _pending_action_state: StringName = &""
+
+
 var _action_active: bool = false
 
 var _initialized: bool = false
@@ -91,7 +94,7 @@ func _ready() -> void:
 	_locomotion_playback = (
 		animation_tree.get(
 			"parameters/%s/playback"
-			% String(root_locomotion_state)
+			% str(root_locomotion_state)
 		)
 		as AnimationNodeStateMachinePlayback
 	)
@@ -99,14 +102,14 @@ func _ready() -> void:
 	_action_playback = (
 		animation_tree.get(
 			"parameters/%s/playback"
-			% String(root_action_state)
+			% str(root_action_state)
 		)
 		as AnimationNodeStateMachinePlayback
 	)
 
 	if _root_playback == null:
 		push_error(
-			"CharacterAnimationController could not find root AnimationTree playback."
+			"CharacterAnimationController could not find root playback."
 		)
 		return
 
@@ -129,6 +132,14 @@ func _ready() -> void:
 	call_deferred(
 		"_initialize_playback"
 	)
+
+
+func _process(_delta: float) -> void:
+	if not _initialized:
+		return
+
+	if _pending_action_state != &"":
+		_try_start_pending_action()
 
 
 func _initialize_playback() -> void:
@@ -193,7 +204,6 @@ func _apply_locomotion_state() -> void:
 			_desired_locomotion_state,
 			true
 		)
-
 		return
 
 	if (
@@ -224,32 +234,53 @@ func play_action(
 	if _action_playback == null:
 		return false
 
-	var was_active := _action_active
+	# ========================================================================
+	# Combo:
+	# já estamos dentro da Action StateMachine.
+	#
+	# Attack01 -> Attack02 -> Attack03
+	# ========================================================================
 
-	# Atualizamos primeiro para que o state_finished
-	# da animação anterior de um crossfade seja ignorado.
+	if _action_active:
+		_active_action_state = state_name
+		_pending_action_state = &""
+
+		if _action_playback.is_playing():
+			_action_playback.travel(
+				state_name,
+				true
+			)
+		else:
+			_action_playback.start(
+				state_name,
+				true
+			)
+
+		action_started.emit(
+			state_name
+		)
+
+		return true
+
+	# ========================================================================
+	# Nova sequência:
+	# Locomotion -> Action
+	#
+	# Primeiro pedimos ao Root para entrar em Action.
+	# Só depois iniciamos o ataque.
+	# ========================================================================
+
 	_action_active = true
+
 	_active_action_state = state_name
 
-	if was_active:
-		_action_playback.travel(
-			state_name,
-			true
-		)
-	else:
-		_action_playback.start(
-			state_name,
-			true
-		)
+	_pending_action_state = state_name
 
-		_root_playback.travel(
-			root_action_state,
-			true
-		)
+	_enter_root_action_state()
 
-	action_started.emit(
-		state_name
-	)
+	# Se o Root já conseguiu entrar imediatamente,
+	# não precisamos esperar o próximo frame.
+	_try_start_pending_action()
 
 	return true
 
@@ -272,16 +303,18 @@ func end_action(
 	)
 
 	_action_active = false
+
 	_active_action_state = &""
 
-	# Enquanto o ataque estava visualmente ativo,
-	# a HFSM continuou atualizando esse estado.
+	_pending_action_state = &""
+
+	# Não paramos a Action StateMachine.
+	#
+	# Apenas tiramos sua influência visual
+	# voltando o Root para Locomotion.
 	_apply_locomotion_state()
 
-	_root_playback.travel(
-		root_locomotion_state,
-		true
-	)
+	_enter_root_locomotion_state()
 
 	action_ended.emit(
 		previous_state
@@ -297,6 +330,97 @@ func get_active_action_state() -> StringName:
 
 
 # ============================================================================
+# Root State Machine
+# ============================================================================
+
+func _enter_root_action_state() -> void:
+	if _root_playback == null:
+		return
+
+	if not _root_playback.is_playing():
+		_root_playback.start(
+			root_action_state,
+			true
+		)
+		return
+
+	if (
+		_root_playback.get_current_node()
+		== root_action_state
+	):
+		return
+
+	_root_playback.travel(
+		root_action_state,
+		true
+	)
+
+
+func _enter_root_locomotion_state() -> void:
+	if _root_playback == null:
+		return
+
+	if not _root_playback.is_playing():
+		_root_playback.start(
+			root_locomotion_state,
+			true
+		)
+		return
+
+	if (
+		_root_playback.get_current_node()
+		== root_locomotion_state
+	):
+		return
+
+	_root_playback.travel(
+		root_locomotion_state,
+		true
+	)
+
+
+func _try_start_pending_action() -> void:
+	if not _action_active:
+		return
+
+	if _pending_action_state == &"":
+		return
+
+	if _root_playback == null:
+		return
+
+	if _action_playback == null:
+		return
+
+	# Muito importante:
+	# só reiniciamos a Action StateMachine
+	# quando o Root realmente chegou em Action.
+	if (
+		_root_playback.get_current_node()
+		!= root_action_state
+	):
+		return
+
+	var state_to_start := (
+		_pending_action_state
+	)
+
+	_pending_action_state = &""
+
+	# Isso é o "reset" que queríamos.
+	#
+	# Não precisa chamar stop().
+	_action_playback.start(
+		state_to_start,
+		true
+	)
+
+	action_started.emit(
+		state_to_start
+	)
+
+
+# ============================================================================
 # AnimationTree Signals
 # ============================================================================
 
@@ -306,10 +430,12 @@ func _on_action_state_finished(
 	if not _action_active:
 		return
 
-	# Durante Attack01 -> Attack02 existe crossfade.
-	# Attack01 eventualmente emitirá state_finished,
-	# mas neste momento Attack02 já é o estado ativo.
-	if state_name != _active_action_state:
+	# Attack01 pode emitir finished depois que
+	# Attack02 já assumiu por causa do crossfade.
+	if (
+		state_name
+		!= _active_action_state
+	):
 		return
 
 	action_finished.emit(

@@ -1669,7 +1669,7 @@ xfade_time = 0.08
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_f6a36"]
 states/Action/node = SubResource("AnimationNodeStateMachine_i7arx")
-states/Action/position = Vector2(529.52, 160)
+states/Action/position = Vector2(529.904, 160.8)
 states/Locomotion/node = SubResource("AnimationNodeStateMachine_c1vxw")
 states/Locomotion/position = Vector2(530, 56.800003)
 transitions = ["Start", "Locomotion", SubResource("AnimationNodeStateMachineTransition_gp8vx"), "Locomotion", "Action", SubResource("AnimationNodeStateMachineTransition_fg0rt"), "Action", "Locomotion", SubResource("AnimationNodeStateMachineTransition_cjvq6")]
