@@ -41,6 +41,7 @@
 [ext_resource type="Script" uid="uid://d3boexliuhthf" path="res://game/movement/character_movement_config.gd" id="37_1bxsr"]
 [ext_resource type="Script" uid="uid://c3aev24qp70kr" path="res://game/combat/reactions/hit_reaction_component.gd" id="37_383lj"]
 [ext_resource type="Script" uid="uid://co83by6vvfsvn" path="res://development/test_actors/target_dummy/target_dummy_motion_driver.gd" id="39_ren3s"]
+[ext_resource type="Script" uid="uid://crepxel1vxu8i" path="res://game/combat/targeting/targetable_component.gd" id="42_i7arx"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0ojxy"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -1136,9 +1137,12 @@ tracks/9/path = NodePath("Components/AnimationCombatBridge")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0.23333333, 0.34, 0.43333334, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0.15517773, 0.23333333, 0.34, 0.43333334, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "values": [{
+"args": [],
+"method": &"apply_attack_magnetism"
+}, {
 "args": [],
 "method": &"open_hitbox"
 }, {
@@ -1295,11 +1299,14 @@ tracks/9/path = NodePath("Components/AnimationCombatBridge")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.033333335, 0.2, 0.23333333, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.014996167, 0.033333335, 0.2, 0.23333333, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "values": [{
 "args": [&"Lunge"],
 "method": &"apply_attack_motion"
+}, {
+"args": [],
+"method": &"apply_attack_magnetism"
 }, {
 "args": [],
 "method": &"open_hitbox"
@@ -1469,11 +1476,14 @@ tracks/9/path = NodePath("Components/AnimationCombatBridge")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0.23333333, 0.26666668, 0.36666667, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0.23333333, 0.24841477, 0.26666668, 0.36666667, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "values": [{
 "args": [&"Lunge"],
 "method": &"apply_attack_motion"
+}, {
+"args": [],
+"method": &"apply_attack_magnetism"
 }, {
 "args": [],
 "method": &"open_hitbox"
@@ -1969,8 +1979,9 @@ script = ExtResource("6_k73tv")
 body = NodePath("../..")
 config = ExtResource("7_80gdj")
 
-[node name="TargetingComponent" type="Node" parent="Player/Ryu/Components" unique_id=476716893]
+[node name="TargetingComponent" type="Node" parent="Player/Ryu/Components" unique_id=476716893 node_paths=PackedStringArray("owner_actor")]
 script = ExtResource("9_yu54f")
+owner_actor = NodePath("../..")
 
 [node name="LocomotionHFSM" type="Node" parent="Player/Ryu/Components" unique_id=1681505079 node_paths=PackedStringArray("body", "movement_component", "grounded_state", "airborne_state")]
 script = ExtResource("11_vyjw0")
@@ -2023,12 +2034,13 @@ locomotion_state_machine = NodePath("../LocomotionHFSM")
 animation_controller = NodePath("../CharacterAnimationController")
 metadata/_custom_type_script = "uid://cwe2a02g1qid6"
 
-[node name="AnimationCombatBridge" type="Node" parent="Player/Ryu/Components" unique_id=1226470637 node_paths=PackedStringArray("ability_system", "animation_controller", "movement_component", "hitboxes")]
+[node name="AnimationCombatBridge" type="Node" parent="Player/Ryu/Components" unique_id=1226470637 node_paths=PackedStringArray("ability_system", "animation_controller", "movement_component", "targeting_component", "hitboxes")]
 script = ExtResource("23_576yk")
 ability_system = NodePath("../AbilitySystemComponent")
 animation_controller = NodePath("../CharacterAnimationController")
 movement_component = NodePath("../MovementComponent")
 animation_finished_event_tag = SubResource("Resource_f6a36")
+targeting_component = NodePath("../TargetingComponent")
 hitboxes = [NodePath("../../Combat/HitBox")]
 bindings = Array[ExtResource("25_7uu5j")]([ExtResource("26_qchnr"), ExtResource("28_a8vxj"), ExtResource("29_yddqy")])
 
@@ -2089,3 +2101,106 @@ metadata/_custom_type_script = "uid://c3aev24qp70kr"
 script = ExtResource("39_ren3s")
 movement_component = NodePath("../MovementComponent")
 metadata/_custom_type_script = "uid://co83by6vvfsvn"
+
+[node name="TargetableComponent" type="Node" parent="CombatTest/Dummy/Components" unique_id=1361465978 node_paths=PackedStringArray("actor")]
+script = ExtResource("42_i7arx")
+actor = NodePath("../..")
+metadata/_custom_type_script = "uid://crepxel1vxu8i"
+
+[node name="Dummy2" type="CharacterBody3D" parent="CombatTest" unique_id=409589955]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9757538, 1.35, -6.4571605)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CombatTest/Dummy2" unique_id=106354645]
+mesh = SubResource("CapsuleMesh_p7od3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CombatTest/Dummy2" unique_id=939165002]
+shape = SubResource("CapsuleShape3D_t5jfb")
+
+[node name="Combat" type="Node3D" parent="CombatTest/Dummy2" unique_id=1898263057]
+
+[node name="HurtBox" type="Area3D" parent="CombatTest/Dummy2/Combat" unique_id=423833325 node_paths=PackedStringArray("ability_system")]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("21_37b0s")
+ability_system = NodePath("../../Components/AbilitySystemComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CombatTest/Dummy2/Combat/HurtBox" unique_id=933631415]
+shape = SubResource("CapsuleShape3D_5pd38")
+
+[node name="Components" type="Node" parent="CombatTest/Dummy2" unique_id=1391043835]
+
+[node name="AbilitySystemComponent" type="Node" parent="CombatTest/Dummy2/Components" unique_id=1224438739]
+script = ExtResource("9_jcwrd")
+initial_attribute_sets = Array[ExtResource("10_ovd1s")]([ExtResource("19_m1xnf")])
+metadata/_custom_type_script = "uid://bvff6yf1rcj4r"
+
+[node name="MovementComponent" type="Node" parent="CombatTest/Dummy2/Components" unique_id=1294178527 node_paths=PackedStringArray("body")]
+script = ExtResource("6_k73tv")
+body = NodePath("../..")
+config = SubResource("Resource_t5jfb")
+metadata/_custom_type_script = "uid://d5nahfrkedod"
+
+[node name="HitReactionComponent" type="Node" parent="CombatTest/Dummy2/Components" unique_id=1821687504 node_paths=PackedStringArray("ability_system", "movement_component")]
+script = ExtResource("37_383lj")
+ability_system = NodePath("../AbilitySystemComponent")
+movement_component = NodePath("../MovementComponent")
+metadata/_custom_type_script = "uid://c3aev24qp70kr"
+
+[node name="TargetDummyMotionDriver" type="Node" parent="CombatTest/Dummy2/Components" unique_id=701560805 node_paths=PackedStringArray("movement_component")]
+script = ExtResource("39_ren3s")
+movement_component = NodePath("../MovementComponent")
+metadata/_custom_type_script = "uid://co83by6vvfsvn"
+
+[node name="TargetableComponent" type="Node" parent="CombatTest/Dummy2/Components" unique_id=1822573204 node_paths=PackedStringArray("actor")]
+script = ExtResource("42_i7arx")
+actor = NodePath("../..")
+metadata/_custom_type_script = "uid://crepxel1vxu8i"
+
+[node name="Dummy3" type="CharacterBody3D" parent="CombatTest" unique_id=566956114]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.504776, 1.35, -6.721672)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CombatTest/Dummy3" unique_id=1175766794]
+mesh = SubResource("CapsuleMesh_p7od3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CombatTest/Dummy3" unique_id=1343862571]
+shape = SubResource("CapsuleShape3D_t5jfb")
+
+[node name="Combat" type="Node3D" parent="CombatTest/Dummy3" unique_id=896870788]
+
+[node name="HurtBox" type="Area3D" parent="CombatTest/Dummy3/Combat" unique_id=1135950938 node_paths=PackedStringArray("ability_system")]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("21_37b0s")
+ability_system = NodePath("../../Components/AbilitySystemComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CombatTest/Dummy3/Combat/HurtBox" unique_id=1698022846]
+shape = SubResource("CapsuleShape3D_5pd38")
+
+[node name="Components" type="Node" parent="CombatTest/Dummy3" unique_id=418487659]
+
+[node name="AbilitySystemComponent" type="Node" parent="CombatTest/Dummy3/Components" unique_id=1816688858]
+script = ExtResource("9_jcwrd")
+initial_attribute_sets = Array[ExtResource("10_ovd1s")]([ExtResource("19_m1xnf")])
+metadata/_custom_type_script = "uid://bvff6yf1rcj4r"
+
+[node name="MovementComponent" type="Node" parent="CombatTest/Dummy3/Components" unique_id=1235232589 node_paths=PackedStringArray("body")]
+script = ExtResource("6_k73tv")
+body = NodePath("../..")
+config = SubResource("Resource_t5jfb")
+metadata/_custom_type_script = "uid://d5nahfrkedod"
+
+[node name="HitReactionComponent" type="Node" parent="CombatTest/Dummy3/Components" unique_id=1953491447 node_paths=PackedStringArray("ability_system", "movement_component")]
+script = ExtResource("37_383lj")
+ability_system = NodePath("../AbilitySystemComponent")
+movement_component = NodePath("../MovementComponent")
+metadata/_custom_type_script = "uid://c3aev24qp70kr"
+
+[node name="TargetDummyMotionDriver" type="Node" parent="CombatTest/Dummy3/Components" unique_id=1968948941 node_paths=PackedStringArray("movement_component")]
+script = ExtResource("39_ren3s")
+movement_component = NodePath("../MovementComponent")
+metadata/_custom_type_script = "uid://co83by6vvfsvn"
+
+[node name="TargetableComponent" type="Node" parent="CombatTest/Dummy3/Components" unique_id=559617650 node_paths=PackedStringArray("actor")]
+script = ExtResource("42_i7arx")
+actor = NodePath("../..")
+metadata/_custom_type_script = "uid://crepxel1vxu8i"

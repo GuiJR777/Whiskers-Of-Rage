@@ -82,11 +82,17 @@ func _physics_process(delta: float) -> void:
 
 		if (
 			targeting_component != null
-			and targeting_component.has_locked_target()
+			and targeting_component.has_facing_target()
 		):
-			facing_direction = (
-				_get_locked_target_direction()
+			var target_direction := (
+				targeting_component
+				.get_direction_to_facing_target()
 			)
+
+			if not target_direction.is_zero_approx():
+				facing_direction = (
+					target_direction
+				)
 
 		_process_jump_input()
 		_process_combat_input()
@@ -185,29 +191,6 @@ func _get_camera_relative_direction(
 
 	return direction
 
-
-func _get_locked_target_direction() -> Vector3:
-	if targeting_component == null:
-		return Vector3.ZERO
-
-	var target := (
-		targeting_component.get_locked_target()
-	)
-
-	if target == null:
-		return Vector3.ZERO
-
-	var direction := (
-		target.global_position
-		- controlled_character.global_position
-	)
-
-	direction.y = 0.0
-
-	if direction.is_zero_approx():
-		return Vector3.ZERO
-
-	return direction.normalized()
 
 
 func _get_active_camera() -> Camera3D:

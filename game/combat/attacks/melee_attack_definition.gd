@@ -28,6 +28,11 @@ var hit_reaction: HitReactionDefinition
 @export
 var attack_motions: Array[AttackMotionDefinition] = []
 
+@export_category("Targeting")
+
+@export
+var targeting: AttackTargetingDefinition
+
 
 func get_attack_motion(
 	motion_id: StringName
@@ -61,6 +66,15 @@ func validate() -> PackedStringArray:
 			errors.append(
 				"Hit Effect: %s"
 				% effect_error
+			)
+	
+	if targeting != null:
+		for targeting_error: String in (
+			targeting.validate()
+		):
+			errors.append(
+				"Targeting: %s"
+				% targeting_error
 			)
 
 	if hit_reaction != null:

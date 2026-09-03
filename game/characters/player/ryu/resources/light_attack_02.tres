@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://mk4xy2umrvlg" path="res://addons/wor_gameplay_framework/runtime/effects/gameplay_effect.gd" id="4_oyaka"]
 [ext_resource type="Script" uid="uid://ctucb2hkrubla" path="res://game/combat/attacks/melee_attack_definition.gd" id="5_bgj5b"]
 [ext_resource type="Script" uid="uid://c8omtfjgl8wq5" path="res://game/combat/reactions/hit_reaction_definition.gd" id="6_oyaka"]
+[ext_resource type="Script" uid="uid://lqpsy4ce8fdv" path="res://game/combat/targeting/attack_targeting_definition.gd" id="8_oyaka"]
 
 [sub_resource type="Resource" id="Resource_n2gkc"]
 script = ExtResource("1_04gp6")
@@ -49,10 +50,15 @@ horizontal_speed = 6.0
 horizontal_deceleration = 15.0
 metadata/_custom_type_script = "uid://c8omtfjgl8wq5"
 
+[sub_resource type="Resource" id="Resource_f6a36"]
+script = ExtResource("8_oyaka")
+metadata/_custom_type_script = "uid://lqpsy4ce8fdv"
+
 [resource]
 script = ExtResource("5_bgj5b")
 attack_id = &"LightAttack02"
 hit_effect = SubResource("Resource_xd7te")
 hit_reaction = SubResource("Resource_vhb21")
 attack_motions = Array[ExtResource("1_04gp6")]([SubResource("Resource_n2gkc")])
+targeting = SubResource("Resource_f6a36")
 metadata/_custom_type_script = "uid://ctucb2hkrubla"

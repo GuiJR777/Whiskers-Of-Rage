@@ -26,6 +26,11 @@ var movement_component: MovementComponent
 @export
 var animation_finished_event_tag: GameplayTag
 
+@export_category("Targeting")
+
+@export
+var targeting_component: TargetingComponent
+
 
 @export_category("Hitboxes")
 
@@ -219,13 +224,14 @@ func apply_attack_motion(
 		)
 		return
 
-	var forward := (
-		movement_component
-		.get_forward_direction()
+	var motion_direction := (
+		_get_attack_motion_direction(
+			attack
+		)
 	)
 
 	movement_component.apply_forced_motion(
-		forward,
+		motion_direction,
 		motion.forward_speed,
 		motion.upward_speed,
 		motion.horizontal_deceleration
@@ -285,6 +291,8 @@ func _on_ability_activated(
 	_active_handle = handle
 	_active_ability = ability
 	_active_binding = binding
+	
+	_acquire_attack_target()
 
 	_active_context = (
 		context.duplicate_context()
@@ -418,6 +426,9 @@ func _finish_active_ability(
 		AbilitySystemComponent
 		.INVALID_ABILITY_HANDLE
 	)
+	
+	if targeting_component != null:
+		targeting_component.clear_soft_target()
 
 	_active_ability = null
 	_active_binding = null
@@ -480,6 +491,29 @@ func _send_combat_event(
 # Lookups
 # ============================================================================
 
+func _get_attack_motion_direction(
+	attack: MeleeAttackDefinition
+) -> Vector3:
+	if (
+		attack != null
+		and attack.targeting != null
+		and attack.targeting.redirect_attack_motion
+		and targeting_component != null
+		and targeting_component.has_soft_target()
+	):
+		var target_direction := (
+			targeting_component
+			.get_direction_to_facing_target()
+		)
+
+		if not target_direction.is_zero_approx():
+			return target_direction
+
+	return (
+		movement_component
+		.get_forward_direction()
+	)
+
 func _find_binding(
 	ability: GameplayAbility
 ) -> CombatAnimationBinding:
@@ -516,3 +550,132 @@ func _get_hitbox(
 			return hitbox
 
 	return null
+	
+func _acquire_attack_target() -> void:
+	if targeting_component == null:
+		return
+
+	if movement_component == null:
+		return
+
+	if _active_binding == null:
+		return
+
+	var attack := (
+		_active_binding.attack_definition
+	)
+
+	if attack == null:
+		return
+
+	if attack.targeting == null:
+		targeting_component.clear_soft_target()
+		return
+
+	var reference_direction := (
+		movement_component
+		.get_forward_direction()
+	)
+
+	targeting_component.acquire_soft_target(
+		reference_direction,
+		attack.targeting
+	)
+
+func apply_attack_magnetism() -> void:
+	if _active_binding == null:
+		return
+
+	if movement_component == null:
+		return
+
+	if targeting_component == null:
+		return
+
+	if not targeting_component.has_soft_target():
+		return
+
+	var attack := (
+		_active_binding.attack_definition
+	)
+
+	if attack == null:
+		return
+
+	var targeting := (
+		attack.targeting
+	)
+
+	if targeting == null:
+		return
+
+	if not targeting.magnetism_enabled:
+		return
+
+	var target := (
+		targeting_component.get_soft_target()
+	)
+
+	if target == null:
+		return
+
+	var body := (
+		movement_component.body
+	)
+
+	if body == null:
+		return
+
+	var to_target := (
+		target.global_position
+		- body.global_position
+	)
+
+	to_target.y = 0.0
+
+	var current_distance := (
+		to_target.length()
+	)
+
+	if current_distance <= 0.001:
+		return
+
+	var travel_distance := (
+		current_distance
+		- targeting.stopping_distance
+	)
+
+	if travel_distance <= 0.0:
+		return
+
+	travel_distance = minf(
+		travel_distance,
+		targeting.maximum_magnetism_distance
+	)
+
+	var direction := (
+		to_target.normalized()
+	)
+
+	# v² = 2ad
+	#
+	# Calculamos a velocidade inicial necessária
+	# para que o Forced Motion desacelere
+	# aproximadamente dentro da distância desejada.
+	var speed := sqrt(
+		2.0
+		* targeting.magnetism_deceleration
+		* travel_distance
+	)
+
+	speed = minf(
+		speed,
+		targeting.maximum_magnetism_speed
+	)
+
+	movement_component.apply_forced_motion(
+		direction,
+		speed,
+		0.0,
+		targeting.magnetism_deceleration
+	)

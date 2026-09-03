@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://ctucb2hkrubla" path="res://game/combat/attacks/melee_attack_definition.gd" id="5_n2gkc"]
 [ext_resource type="Resource" uid="uid://cmfw3oplll5f4" path="res://game/status_effects/knockdown_effect.tres" id="6_n2gkc"]
 [ext_resource type="Script" uid="uid://c8omtfjgl8wq5" path="res://game/combat/reactions/hit_reaction_definition.gd" id="7_0u8sc"]
+[ext_resource type="Script" uid="uid://lqpsy4ce8fdv" path="res://game/combat/targeting/attack_targeting_definition.gd" id="9_n2gkc"]
 
 [sub_resource type="Resource" id="Resource_jilwa"]
 script = ExtResource("1_vhb21")
@@ -60,10 +61,15 @@ causes_knockdown = true
 knockdown_effect = ExtResource("6_n2gkc")
 metadata/_custom_type_script = "uid://c8omtfjgl8wq5"
 
+[sub_resource type="Resource" id="Resource_f6a36"]
+script = ExtResource("9_n2gkc")
+metadata/_custom_type_script = "uid://lqpsy4ce8fdv"
+
 [resource]
 script = ExtResource("5_n2gkc")
 attack_id = &"LightAttack03"
 hit_effect = SubResource("Resource_xd7te")
 hit_reaction = SubResource("Resource_vhb21")
 attack_motions = Array[ExtResource("1_vhb21")]([SubResource("Resource_jilwa"), SubResource("Resource_1bxsr")])
+targeting = SubResource("Resource_f6a36")
 metadata/_custom_type_script = "uid://ctucb2hkrubla"
